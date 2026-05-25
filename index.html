@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sangamesh Athani - Developer Portfolio. B.E. Computer Science Engineering (AI & ML) student and IoT enthusiast specializing in hardware-to-cloud systems.">
+    <meta name="keywords" content="Sangamesh Athani, Portfolio, BE CSE, AI, Machine Learning, IoT Prototyping, Embedded Systems, Software Developer, Android Development">
+    <meta name="author" content="Sangamesh Athani">
+    <title>Sangamesh Athani | Building Intelligent Systems</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Custom Glowing Pointer & Trailing Cursor Ring -->
+    <div class="custom-cursor" id="customCursor"></div>
+    <div class="custom-cursor-dot" id="customCursorDot"></div>
+
+    <!-- Neural Network Background Canvas -->
+    <canvas id="neuralCanvas"></canvas>
+
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="#home" class="logo" id="navLogo">
+                <span class="logo-accent">&lt;</span>SANGAMESH<span class="logo-accent">.DEV /&gt;</span>
+            </a>
+            
+            <nav class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active" id="link-home">Home</a>
+                <a href="#about" class="nav-link" id="link-about">About</a>
+                <a href="#experience" class="nav-link" id="link-experience">Experience</a>
+                <a href="#education" class="nav-link" id="link-education">Education</a>
+                <a href="#projects" class="nav-link" id="link-projects">Projects</a>
+                <a href="#skills" class="nav-link" id="link-skills">Skills</a>
+                <a href="#contact" class="nav-link" id="link-contact">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme">
+                    <i data-lucide="sun" class="sun-icon"></i>
+                    <i data-lucide="moon" class="moon-icon"></i>
+                </button>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div class="container hero-container">
+                <div class="hero-content reveal">
+                    <div class="status-badge">
+                        <span class="badge-dot"></span>
+                        <span class="badge-text font-code">// Engineering the future of automation</span>
+                    </div>
+                    <h1 class="hero-title">
+                        Coding Intelligence. <span class="text-gradient">Deploying Hardware.</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        B.E. CSE (AI & ML) Student <span class="separator">|</span> Building Full-Stack IoT & Intelligent Software Solutions.
+                    </p>
+                    <div class="hero-ctas">
+                        <a href="#projects" class="btn btn-primary" id="ctaViewWork">
+                            <span>View My Work</span>
+                            <i data-lucide="arrow-down" class="btn-icon"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/sangamesh29/" target="_blank" rel="noopener noreferrer" class="btn btn-outline" id="ctaLinkedIn">
+                            <!-- LinkedIn inline SVG -->
+                            <svg class="btn-icon-left" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            <span>Connect on LinkedIn</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Interactive Dev Terminal -->
+                <div class="hero-graphic reveal delay-2">
+                    <div class="terminal-mockup tilt-card">
+                        <div class="terminal-header">
+                            <div class="terminal-buttons">
+                                <span class="t-btn red"></span>
+                                <span class="t-btn yellow"></span>
+                                <span class="t-btn green"></span>
+                            </div>
+                            <div class="terminal-title font-code">Sangamesh</div>
+                            <div class="terminal-action">
+                                <i data-lucide="terminal" size="14"></i>
+                            </div>
+                        </div>
+                        <div class="terminal-body font-code">
+                            <div class="line"><span class="t-prompt">$</span> cat hello_world.py</div>
+                            <div class="line profile-output"><span class="syntax-keyword">class</span> Developer:
+    <span class="syntax-keyword">def</span> __init__(self):
+        self.name = <span class="syntax-string">"Sangamesh Athani"</span>
+        self.role = <span class="syntax-string">"B.E. CSE (AI & ML) Student"</span>
+        self.college = <span class="syntax-string">"JCER, Belagavi"</span>
+        self.links = {
+            <span class="syntax-string">"github"</span>: <span class="syntax-string">"https://github.com/SangameshAthani"</span>,
+            <span class="syntax-string">"linkedin"</span>: <span class="syntax-string">"https://www.linkedin.com/in/sangamesh29/"</span>
+        }
+
+    <span class="syntax-keyword">def</span> get_status(self):
+        <span class="syntax-keyword">return</span> <span class="syntax-string">"Coding intelligence. Deploying hardware."</span>
+
+me = Developer()
+print(me.get_status())</div>
+                            <div class="line"><span class="t-prompt">$</span> <span class="typewriter-command"></span><span class="cursor-blink">|</span></div>
+                            <div class="terminal-interactive-output" id="terminalOutput"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <span class="mouse">
+                    <span class="wheel"></span>
+                </span>
+                <p class="font-code text-muted">Scroll Down</p>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag font-code">01 // PROFILE</span>
+                    <h2 class="section-title">About Me</h2>
+                    <div class="section-bar"></div>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-text reveal">
+                        <p class="lead-bio">
+                            I am a motivated and innovative B.E. Computer Science Engineering student specializing in AI & Machine Learning, with a deep interest in IoT and physical automation pipelines.
+                        </p>
+                        <p>
+                            I enjoy engineering smart systems from the ground up—flashing microcontrollers, interfacing sensor nodes, and deploying intuitive cloud-based dashboard interfaces. My technical design principles are heavily inspired by modern UI/UX workflows, ensuring hardware complexity transitions into frictionless user layouts.
+                        </p>
+                        <p>
+                            I am actively seeking software development and IoT engineering roles where I can combine analytical machine learning models, edge computing scripts, and clean frontend architectures to build high-impact automation products.
+                        </p>
+
+                        <!-- Academic Highlight Card -->
+                        <div class="education-card">
+                            <div class="ed-icon-wrapper">
+                                <i data-lucide="graduation-cap"></i>
+                            </div>
+                            <div class="ed-details">
+                                <h3 class="ed-title">B.E. in Computer Science & Engineering</h3>
+                                <p class="ed-subtitle">Specializing in Artificial Intelligence & Machine Learning</p>
+                                <span class="ed-institution">VTU, Karnataka, India</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive telemetry / dashboard panel -->
+                    <div class="about-dashboard reveal delay-2">
+                        <div class="dashboard-card">
+                            <div class="dash-header">
+                                <div class="dash-title font-code">&lt;SYSTEM_TELEMETRY&gt;</div>
+                                <span class="pulse-indicator"></span>
+                            </div>
+                            <div class="dash-body font-code">
+                                <div class="dash-stat">
+                                    <span class="dash-label">COGNITIVE_CORE:</span>
+                                    <span class="dash-value text-cyan">ACTIVE</span>
+                                </div>
+                                <div class="dash-stat">
+                                    <span class="dash-label">AI_ML_MODELS:</span>
+                                    <div class="dash-progress-track">
+                                        <div class="dash-progress-fill cyan-glow" style="width: 82%"></div>
+                                    </div>
+                                    <span class="dash-pct">82%</span>
+                                </div>
+                                <div class="dash-stat">
+                                    <span class="dash-label">EMBEDDED_IoT:</span>
+                                    <div class="dash-progress-track">
+                                        <div class="dash-progress-fill purple-glow" style="width: 90%"></div>
+                                    </div>
+                                    <span class="dash-pct">90%</span>
+                                </div>
+                                <div class="dash-stat">
+                                    <span class="dash-label">FULLSTACK_DEV:</span>
+                                    <div class="dash-progress-track">
+                                        <div class="dash-progress-fill orange-glow" style="width: 80%"></div>
+                                    </div>
+                                    <span class="dash-pct">80%</span>
+                                </div>
+                                <div class="dash-stat">
+                                    <span class="dash-label">SYSTEM_UPTIME:</span>
+                                    <span class="dash-value text-purple">99.8%</span>
+                                </div>
+                                <div class="dash-console">
+                                    <div class="dash-console-line">&gt; Loading active sensors... OK</div>
+                                    <div class="dash-console-line">&gt; System initialized in dark mode...</div>
+                                    <div class="dash-console-line">&gt; Listening for user telemetry requests...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="experience-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag font-code">02 // INDUSTRIAL TIMELINE</span>
+                    <h2 class="section-title">
+                        <svg class="header-3d-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="expGradBack" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#7C3AED" />
+                                    <stop offset="100%" stop-color="#0D9488" />
+                                </linearGradient>
+                                <linearGradient id="expGradFront" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="rgba(255, 255, 255, 0.55)" />
+                                    <stop offset="100%" stop-color="rgba(255, 255, 255, 0.15)" />
+                                </linearGradient>
+                                <filter id="glassBlur2">
+                                    <feGaussianBlur stdDeviation="0.8" />
+                                </filter>
+                            </defs>
+                            <!-- Handle -->
+                            <path d="M11 6a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v2h-10V6z" fill="#E2E8F0" opacity="0.9" />
+                            <!-- Back Briefcase Body -->
+                            <rect x="3" y="8" width="26" height="18" rx="4" fill="url(#expGradBack)" />
+                            <!-- Internal Clock Gear / Star (Glowing) -->
+                            <circle cx="16" cy="17" r="4" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="2,2" />
+                            <circle cx="16" cy="17" r="1.5" fill="#ffffff" />
+                            <!-- Glass Front Cover -->
+                            <path d="M3 14h26v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V14z" fill="url(#expGradFront)" filter="url(#glassBlur2)" stroke="rgba(255, 255, 255, 0.4)" stroke-width="0.75" />
+                            <!-- Lock -->
+                            <rect x="14" y="12" width="4" height="4" rx="1" fill="#E2E8F0" />
+                        </svg>
+                        Work Experience
+                    </h2>
+                    <div class="section-bar"></div>
+                </div>
+
+                <div class="timeline-container">
+                    <div class="timeline-item reveal">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date font-code">2025 (Remote)</div>
+                        <div class="timeline-content-card tilt-card">
+                            <div class="exp-header">
+                                <div class="exp-title-area">
+                                    <h3 class="exp-role">Software Development Intern</h3>
+                                    <span class="exp-company font-code">Codec Technologies</span>
+                                </div>
+                                <span class="exp-badge">Internship</span>
+                            </div>
+                            <p class="exp-desc">
+                                Gained hands-on professional exposure in full-stack software development workflows under structured industry mentorship. Completed application deliverables in cooperation with cross-functional developer teams.
+                            </p>
+                            <ul class="exp-bullets">
+                                <li>Collaborated on real-world software modules, conforming to Agile sprint schedules and tasks.</li>
+                                <li>Developed, debugged, and documented frontend and backend components for responsive web utilities.</li>
+                                <li>Practiced robust version control workflows, executing git merges, pull requests, and codebase maintenance.</li>
+                            </ul>
+                            <div class="exp-tech-tags">
+                                <span class="tech-badge">Web Dev</span>
+                                <span class="tech-badge">Git & GitHub</span>
+                                <span class="tech-badge">Agile Scrum</span>
+                                <span class="tech-badge">Debugging</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="education-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag font-code">03 // LEARNING PATH</span>
+                    <h2 class="section-title">
+                        <svg class="header-3d-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="eduGradBack" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#3B82F6" />
+                                    <stop offset="100%" stop-color="#8B5CF6" />
+                                </linearGradient>
+                                <linearGradient id="eduGradFront" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="rgba(255, 255, 255, 0.55)" />
+                                    <stop offset="100%" stop-color="rgba(255, 255, 255, 0.15)" />
+                                </linearGradient>
+                                <filter id="glassBlurEdu">
+                                    <feGaussianBlur stdDeviation="0.8" />
+                                </filter>
+                            </defs>
+                            <!-- Backcap cap shape -->
+                            <path d="M16 5L3 12l13 7 13-7-13-7z" fill="url(#eduGradBack)" />
+                            <!-- Tassel -->
+                            <path d="M24 13.5v7l-2 1.5-2-1.5v-7" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
+                            <!-- Glass Front Cap Base -->
+                            <path d="M9 15.5v4.5c0 3 2.5 4 7 4s7-1 7-4v-4.5" fill="url(#eduGradFront)" filter="url(#glassBlurEdu)" stroke="rgba(255, 255, 255, 0.4)" stroke-width="0.75" />
+                        </svg>
+                        Education
+                    </h2>
+                    <div class="section-bar"></div>
+                </div>
+
+                <div class="edu-timeline">
+                    <!-- Education 1 -->
+                    <div class="edu-item reveal">
+                        <div class="edu-node"></div>
+                        <div class="edu-content tilt-card flip-card">
+                            <div class="card-inner">
+                                <!-- Front Side -->
+                                <div class="card-front">
+                                    <h3 class="edu-institution">Jain College of Engineering and Research, Belagavi</h3>
+                                    <h4 class="edu-degree">B.E. in Computer Science (AI & ML)</h4>
+                                    <span class="edu-timeline-text font-code">Sep 2025 - Present</span>
+                                </div>
+                                <!-- Back Side -->
+                                <div class="card-back">
+                                    <div class="edu-details-back">
+                                        <span class="edu-timeline-text font-code">CORE ACADEMICS</span>
+                                        <p class="edu-details">Focus areas include Data Structures, Machine Learning, IoT Systems, Embedded Systems, and Python Programming.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Education 2 -->
+                    <div class="edu-item reveal">
+                        <div class="edu-node"></div>
+                        <div class="edu-content tilt-card flip-card">
+                            <div class="card-inner">
+                                <!-- Front Side -->
+                                <div class="card-front">
+                                    <h3 class="edu-institution">Excellent PU Science College, Vijayapura</h3>
+                                    <h4 class="edu-degree">Pre-University Certificate (PUC) - Science</h4>
+                                    <span class="edu-timeline-text font-code">2022 - 2024</span>
+                                </div>
+                                <!-- Back Side -->
+                                <div class="card-back">
+                                    <div class="edu-details-back">
+                                        <span class="edu-timeline-text font-code">FOUNDATION SCIENCES</span>
+                                        <p class="edu-details">Developed a strong analytical foundation with a focus on core physics, chemistry, and mathematical systems.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Education 3 -->
+                    <div class="edu-item reveal">
+                        <div class="edu-node"></div>
+                        <div class="edu-content tilt-card flip-card">
+                            <div class="card-inner">
+                                <!-- Front Side -->
+                                <div class="card-front">
+                                    <h3 class="edu-institution">St. Joseph's School, Vijayapura</h3>
+                                    <h4 class="edu-degree">High School (SSLC)</h4>
+                                    <span class="edu-timeline-text font-code">2021 - 2022</span>
+                                </div>
+                                <!-- Back Side -->
+                                <div class="card-back">
+                                    <div class="edu-details-back">
+                                        <span class="edu-timeline-text font-code">SECONDARY EDUCATION</span>
+                                        <p class="edu-details">Completed Secondary School Leaving Certificate with honors, building initial math and computer literacy foundations.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="projects-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag font-code">04 // DEVELOPER LOGS</span>
+                    <h2 class="section-title">
+                        <svg class="header-3d-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="projGradBack" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#2563EB" />
+                                    <stop offset="100%" stop-color="#06B6D4" />
+                                </linearGradient>
+                                <linearGradient id="projGradFront" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="rgba(255, 255, 255, 0.6)" />
+                                    <stop offset="100%" stop-color="rgba(255, 255, 255, 0.15)" />
+                                </linearGradient>
+                                <filter id="glassBlur">
+                                    <feGaussianBlur stdDeviation="1" />
+                                </filter>
+                            </defs>
+                            <!-- Back Flap -->
+                            <path d="M2 8a3 3 0 0 1 3-3h6l3 4h13a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8z" fill="url(#projGradBack)" />
+                            <!-- Internal Code Object (Glowing) -->
+                            <path d="M12 14l-3 3 3 3M20 14l3 3-3 3M17 13l-2 8" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" />
+                            <!-- Glass Front Flap -->
+                            <path d="M2 12h28v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V12z" fill="url(#projGradFront)" filter="url(#glassBlur)" stroke="rgba(255, 255, 255, 0.4)" stroke-width="0.75" />
+                        </svg>
+                        Featured Projects
+                    </h2>
+                    <div class="section-bar"></div>
+                </div>
+
+                <!-- Grid of Interactive Project Cards -->
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <div class="project-card-wrapper">
+                        <div class="project-card tilt-card flip-card reveal" data-project="stamp">
+                            <div class="card-inner">
+                                <!-- Front Side -->
+                                <div class="card-front">
+                                    <div class="card-glow"></div>
+                                    <div class="project-image-fallback purple">
+                                        <i data-lucide="cpu" class="project-icon"></i>
+                                        <div class="tech-lines"></div>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="project-category font-code">IoT & HARDWARE INTEGRATION</span>
+                                        <h3 class="project-name">STAMP (Transformer Monitoring System)</h3>
+                                        <div class="project-tags">
+                                            <span class="tag font-code">Arduino</span>
+                                            <span class="tag font-code">GSM SIM900A</span>
+                                            <span class="tag font-code">Sensors</span>
+                                            <span class="tag font-code">Embedded C++</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Back Side -->
+                                <div class="card-back">
+                                    <div class="project-info-back">
+                                        <div>
+                                            <span class="project-category font-code">System Diagnostics</span>
+                                            <h3 class="project-name">STAMP Overview</h3>
+                                            <p class="project-desc">IoT monitoring prototype utilizing Arduino Uno and GSM sensors to transmit instant SMS warnings upon identifying distribution overload anomalies.</p>
+                                        </div>
+                                        <div class="project-actions-back">
+                                            <a href="https://smarttransformer.lovable.app/" target="_blank" rel="noopener noreferrer" class="btn-preview-link btn-neon-glowing font-code">
+                                                <span>Live Preview</span>
+                                                <i data-lucide="external-link" class="btn-icon"></i>
+                                            </a>
+                                            <button type="button" class="project-cta-btn font-code" id="btn-project-stamp">
+                                                <span>Analyze System</span>
+                                                <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div class="project-card-wrapper">
+                        <div class="project-card tilt-card flip-card reveal delay-1" data-project="tripmaster">
+                            <div class="card-inner">
+                                <!-- Front Side -->
+                                <div class="card-front">
+                                    <div class="card-glow"></div>
+                                    <div class="project-image-fallback cyan">
+                                        <i data-lucide="compass" class="project-icon"></i>
+                                        <div class="tech-lines"></div>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="project-category font-code">AI & WEB DEVELOPMENT</span>
+                                        <h3 class="project-name">Trip Master - AI Travel Planner</h3>
+                                        <div class="project-tags">
+                                            <span class="tag font-code">HTML5/CSS3</span>
+                                            <span class="tag font-code">JavaScript</span>
+                                            <span class="tag font-code">Python</span>
+                                            <span class="tag font-code">REST APIs</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Back Side -->
+                                <div class="card-back">
+                                    <div class="project-info-back">
+                                        <div>
+                                            <span class="project-category font-code">AI Engine Diagnostics</span>
+                                            <h3 class="project-name">Trip Master Overview</h3>
+                                            <p class="project-desc">Fullstack planner creating dynamic routes, cost projections, and collaborative options integrated with AI recommendation protocols.</p>
+                                        </div>
+                                        <div class="project-actions-back">
+                                            <a href="https://github.com/SangameshAthani" target="_blank" rel="noopener noreferrer" class="btn-preview-link font-code">
+                                                <span>View Source</span>
+                                                <i data-lucide="github" class="btn-icon"></i>
+                                            </a>
+                                            <button type="button" class="project-cta-btn font-code" id="btn-project-tripmaster">
+                                                <span>Analyze System</span>
+                                                <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="project-card-wrapper">
+                        <div class="project-card tilt-card flip-card reveal delay-2" data-project="security">
+                            <div class="card-inner">
+                                <!-- Front Side -->
+                                <div class="card-front">
+                                    <div class="card-glow"></div>
+                                    <div class="project-image-fallback orange">
+                                        <i data-lucide="shield-alert" class="project-icon"></i>
+                                        <div class="tech-lines"></div>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="project-category font-code">NETWORK SECURITY & LINUX</span>
+                                        <h3 class="project-name">Security Monitoring Dashboard</h3>
+                                        <div class="project-tags">
+                                            <span class="tag font-code">Python</span>
+                                            <span class="tag font-code">Linux</span>
+                                            <span class="tag font-code">Shell Script</span>
+                                            <span class="tag font-code">Net Protocols</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Back Side -->
+                                <div class="card-back">
+                                    <div class="project-info-back">
+                                        <div>
+                                            <span class="project-category font-code">Security Diagnostics</span>
+                                            <h3 class="project-name">Dashboard Overview</h3>
+                                            <p class="project-desc">Terminal diagnostics and web widgets evaluating suspicious packet logs, traffic profiles, and active network vulnerabilities.</p>
+                                        </div>
+                                        <div class="project-actions-back">
+                                            <a href="https://github.com/SangameshAthani" target="_blank" rel="noopener noreferrer" class="btn-preview-link font-code">
+                                                <span>View Source</span>
+                                                <i data-lucide="github" class="btn-icon"></i>
+                                            </a>
+                                            <button type="button" class="project-cta-btn font-code" id="btn-project-security">
+                                                <span>Analyze System</span>
+                                                <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 4 -->
+                    <div class="project-card-wrapper">
+                        <div class="project-card tilt-card flip-card reveal delay-3" data-project="portfolio">
+                            <div class="card-inner">
+                                <!-- Front Side -->
+                                <div class="card-front">
+                                    <div class="card-glow"></div>
+                                    <div class="project-image-fallback purple">
+                                        <i data-lucide="layout" class="project-icon"></i>
+                                        <div class="tech-lines"></div>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="project-category font-code">UI/UX & FRONTEND DESIGN</span>
+                                        <h3 class="project-name">Personal Portfolio Website</h3>
+                                        <div class="project-tags">
+                                            <span class="tag font-code">HTML5</span>
+                                            <span class="tag font-code">CSS variables</span>
+                                            <span class="tag font-code">JavaScript</span>
+                                            <span class="tag font-code">UI/UX</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Back Side -->
+                                <div class="card-back">
+                                    <div class="project-info-back">
+                                        <div>
+                                            <span class="project-category font-code">Frontend Diagnostics</span>
+                                            <h3 class="project-name">Portfolio Overview</h3>
+                                            <p class="project-desc">A premium developer platform demonstrating project details, and optimized layouts adhering strictly to responsive web standards.</p>
+                                        </div>
+                                        <div class="project-actions-back">
+                                            <a href="https://github.com/SangameshAthani" target="_blank" rel="noopener noreferrer" class="btn-preview-link font-code">
+                                                <span>View Source</span>
+                                                <i data-lucide="github" class="btn-icon"></i>
+                                            </a>
+                                            <button type="button" class="project-cta-btn font-code" id="btn-project-portfolio">
+                                                <span>Analyze System</span>
+                                                <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Skills Section -->
+        <section id="skills" class="skills-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag font-code">05 // KNOWLEDGE MAP</span>
+                    <h2 class="section-title">Technical Expertise</h2>
+                    <div class="section-bar"></div>
+                </div>
+
+                <div class="skills-grid">
+                    <!-- Column 1: Programming Languages -->
+                    <div class="skills-card reveal">
+                        <div class="skills-card-glow purple"></div>
+                        <div class="skills-card-header">
+                            <i data-lucide="code-2" class="skills-icon text-purple"></i>
+                            <h3>Languages</h3>
+                        </div>
+                        <p class="skills-card-desc">Core languages used in scripting machine learning routines and embedded hardware nodes.</p>
+                        <div class="badge-container">
+                            <div class="skill-badge" data-desc="The main backend language for AI modeling, machine learning, and packet diagnostics.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24">
+                                    <path d="M12.016 0C8.974 0 8.328.13 7.337.56c-1.436.626-1.859 1.603-1.859 3.666v2.33h6.541v.67H5.478c-2.541 0-3.94 1.15-4.43 3.46-.43 2.08-.43 3.8 0 5.88.39 1.83 1.39 3.01 3.61 3.01h1.86v-2.62c0-2 .96-3.81 2.71-4.4.98-.32 2.08-.46 3.12-.46 1.04 0 2.08.14 3.06.46 1.76.59 2.72 2.4 2.72 4.4v2.62h1.86c2.22 0 3.22-.99 3.61-2.82.44-2.08.44-3.8 0-5.88-.49-2.31-1.88-3.46-4.43-3.46h-1.26v-.67h6.54v-2.33c0-2.063-.42-3.04-1.85-3.666C20.672.13 20.026 0 16.984 0zm-2.956 1.63a1.09 1.09 0 1 1 0 2.19 1.09 1.09 0 0 1 0-2.19z" class="python-blue" fill="currentColor"/>
+                                    <path d="M12.016 24c3.042 0 3.688-.13 4.679-.56 1.436-.626 1.859-1.603 1.859-3.666v-2.33H12.01v-.67h6.541c2.541 0 3.94-1.15 4.43-3.46.43-2.08.43-3.8 0-5.88-.39-1.83-1.39-3.01-3.61-3.01h-1.86v2.62c0 2-.96 3.81-2.71 4.4-.98.32-2.08.46-3.12.46-1.04 0-2.08-.14-3.06-.46-1.76-.59-2.72-2.4-2.72-4.4v-2.62H5.478c-2.22 0-3.22.99-3.61 2.82-.44 2.08-.44 3.8 0 5.88.49 2.31 1.88 3.46 4.43 3.46h1.26v.67h-6.54v2.33c0 2.063.42 3.04 1.85 3.666C3.36 23.87 4.006 24 7.048 24zm2.956-1.63a1.09 1.09 0 1 1 0-2.19 1.09 1.09 0 0 1 0 2.19z" class="python-yellow" fill="currentColor"/>
+                                </svg>
+                                <span>Python</span>
+                                <span class="skill-level-indicator py"></span>
+                            </div>
+                            <div class="skill-badge" data-desc="Procedural development in microcontrollers and low-level firmware optimizations.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24"><path class="c-path" fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 17c-2.76 0-5-2.24-5-5s2.24-5 5-5c1.66 0 3.13.81 4.05 2.05L13.8 13c-.35-.6-1.01-1-1.8-1-1.1 0-2 .9-2 2s.9 2 2 2c.79 0 1.45-.4 1.8-1l2.25 1.95C15.13 18.19 13.66 19 12 19z"/></svg>
+                                <span>C</span>
+                                <span class="skill-level-indicator ec"></span>
+                            </div>
+                            <div class="skill-badge" data-desc="Front-end logic, dynamic UI transitions, and modular simulator mechanics.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24"><rect class="js-bg" width="24" height="24" rx="3" fill="currentColor"/><text class="js-text" x="12" y="18" font-family="Arial, sans-serif" font-weight="900" font-size="12" fill="var(--bg-base)" text-anchor="middle">JS</text></svg>
+                                <span>JavaScript</span>
+                                <span class="skill-level-indicator web"></span>
+                            </div>
+                            <div class="skill-badge" data-desc="The core structural language used in structuring portfolio sections.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24"><path class="html-path" fill="currentColor" d="M1.5 0h21l-1.91 21.56L12 24l-8.59-2.44L1.5 0zm17 5H5.5l.38 4.25H16l-.37 4.13L12 14.5l-3.63-1.12L8.13 10h-2.1l.48 5.37L12 17l5.48-1.63L18.5 5z"/></svg>
+                                <span>HTML</span>
+                                <span class="skill-level-indicator web"></span>
+                            </div>
+                            <div class="skill-badge" data-desc="Applying layout properties, responsive grids, and dark/light transitions.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24"><path class="css-path" fill="currentColor" d="M1.5 0h21l-1.91 21.56L12 24l-8.59-2.44L1.5 0zm17 5H5.5l.38 4.25H16l-.37 4.13L12 14.5l-3.63-1.12-.24-2.75h2.1l.12 1.38L12 12.5l2.42-.75.25-2.75H5.7l.38-4.25h12.5z"/></svg>
+                                <span>CSS</span>
+                                <span class="skill-level-indicator web"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Technologies & Platforms -->
+                    <div class="skills-card reveal delay-1">
+                        <div class="skills-card-glow cyan"></div>
+                        <div class="skills-card-header">
+                            <i data-lucide="cpu" class="skills-icon text-cyan"></i>
+                            <h3>Tech & Platforms</h3>
+                        </div>
+                        <p class="skills-card-desc">Framework systems and platforms applied in constructing hardware-to-cloud utilities.</p>
+                        <div class="badge-container">
+                            <div class="skill-badge" data-desc="Engineering systems connecting active sensors, gateways, and cellular networks.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+                                <span>IoT</span>
+                                <span class="skill-level-indicator iot"></span>
+                            </div>
+                            <div class="skill-badge" data-desc="Flashing embedded code, handling interrupts, and analyzing board behaviors.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="12" r="4.5"/><circle cx="16.5" cy="12" r="4.5"/><path d="M12 12h.01M6 12h3M15 12h3"/></svg>
+                                <span>Arduino</span>
+                                <span class="skill-level-indicator ml"></span>
+                            </div>
+                            <div class="skill-badge" data-desc="Firmware script optimization, circuit mapping, and sensor communications.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/></svg>
+                                <span>Embedded Systems</span>
+                                <span class="skill-level-indicator ec"></span>
+                            </div>
+                            <div class="skill-badge" data-desc="Developing Android apps, embedding firmware APIs, and customizing OS deployments.">
+                                <svg class="skill-icon-svg" viewBox="0 0 16 16"><path class="android-path" fill="currentColor" d="M2.76 3.061a.5.5 0 0 1 .679.2l1.283 2.352A8.9 8.9 0 0 1 8 5a8.9 8.9 0 0 1 3.278.613l1.283-2.352a.5.5 0 1 1 .878.478l-1.252 2.295C14.475 7.266 16 9.477 16 12H0c0-2.523 1.525-4.734 3.813-5.966L2.56 3.74a.5.5 0 0 1 .2-.678ZM5 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2m6 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg>
+                                <span>Android</span>
+                                <span class="skill-level-indicator android"></span>
+                            </div>
+                            <div class="skill-badge" data-desc="Building responsive mockups, API routing, and web interfaces.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                <span>Web Development</span>
+                                <span class="skill-level-indicator web"></span>
+                            </div>
+                            <div class="skill-badge" data-desc="Defining layouts, spacing systems, and prototyping in Figma.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"/><path d="M12 8V2H5a5 5 0 0 0 0 10h7z"/><circle cx="17" cy="7" r="5"/></svg>
+                                <span>UI/UX Design</span>
+                                <span class="skill-level-indicator uiux"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: Tools & Soft Skills -->
+                    <div class="skills-card reveal delay-2">
+                        <div class="skills-card-glow orange"></div>
+                        <div class="skills-card-header">
+                            <i data-lucide="settings" class="skills-icon text-orange"></i>
+                            <h3>Tools & Soft Skills</h3>
+                        </div>
+                        <p class="skills-card-desc">Supporting developer programs and professional capabilities driving system success.</p>
+                        <div class="badge-container">
+                            <!-- Tools -->
+                            <div class="skill-badge" data-desc="Version control workflows, commit trees, and repository management.">
+                                <svg class="skill-icon-svg git-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 15V9a4 4 0 0 0-4-4H9"/><line x1="6" y1="9" x2="6" y2="15"/></svg>
+                                <span>Git</span>
+                            </div>
+                            <div class="skill-badge" data-desc="IDE of choice for full-stack software and script development.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" fill="currentColor"><path class="vscode-path" d="M23.985 6.84a.639.639 0 0 0-.295-.386L18.4 3.195a.627.627 0 0 0-.682.08L10.3 8.355 4.316 3.66a.636.636 0 0 0-.806.012L.21 6.307a.64.64 0 0 0-.012.986l4.249 3.904-4.25 3.9a.64.64 0 0 0 .012.986l3.3 2.635a.636.636 0 0 0 .806.012L10.3 14.04l7.418 5.082c.214.147.494.137.697-.024l5.275-3.26a.639.639 0 0 0 .295-.386V7.24a.639.639 0 0 0-.005-.4zm-6.27 7.37L10.3 9.42l7.415-4.79v9.58z"/></svg>
+                                <span>VS Code</span>
+                            </div>
+                            <div class="skill-badge" data-desc="Writing, compiling, and flashing C++ scripts to microcontrollers.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+                                <span>Arduino IDE</span>
+                            </div>
+                            <div class="skill-badge" data-desc="Creating diagrams, mockups, and presentations.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M21 12H3M12 3v18"/></svg>
+                                <span>Canva</span>
+                            </div>
+                            <div class="skill-badge" data-desc="Mapping user flows, grids, and wireframe models.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24">
+                                    <!-- Top Left: Red-Orange -->
+                                    <path d="M8 2a4 4 0 0 0-4 4 4 4 0 0 0 4 4h4V2H8z" class="figma-orange" fill="currentColor"/>
+                                    <!-- Mid Left: Purple -->
+                                    <path d="M8 10a4 4 0 0 0-4 4 4 4 0 0 0 4 4h4v-8H8z" class="figma-purple" fill="currentColor"/>
+                                    <!-- Bottom Left: Green -->
+                                    <path d="M8 18a4 4 0 0 0-4 4 4 4 0 0 0 4-4V18z" class="figma-green" fill="currentColor"/>
+                                    <!-- Top Right: Light Red -->
+                                    <path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" class="figma-red" fill="currentColor"/>
+                                    <!-- Mid Right: Blue -->
+                                    <path d="M12 10v8h4a4 4 0 0 0 0-8h-4z" class="figma-blue" fill="currentColor"/>
+                                </svg>
+                                <span>Figma</span>
+                            </div>
+                            <!-- Soft Skills -->
+                            <div class="skill-badge soft-skill" data-desc="Guiding academic teams and managing project milestones to completion.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                <span>Team Leadership</span>
+                            </div>
+                            <div class="skill-badge soft-skill" data-desc="Evaluating hardware logic, sensor thresholds, and debugging code anomalies.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                <span>Critical Thinking</span>
+                            </div>
+                            <div class="skill-badge soft-skill" data-desc="Structuring project phases, timing, and components.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                <span>Project Management</span>
+                            </div>
+                            <div class="skill-badge soft-skill" data-desc="Presenting prototypes and writing technical system documentation.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                <span>Communication</span>
+                            </div>
+                            <div class="skill-badge soft-skill" data-desc="Tracing logical errors, fixing sensor failures, and code debugging.">
+                                <svg class="skill-icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                <span>Problem Solving</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill detail viewer panel -->
+                <div class="skill-viewer-panel reveal">
+                    <div class="viewer-header">
+                        <i data-lucide="info" size="16"></i>
+                        <span class="font-code text-muted">Hover over any skill badge above to inspect technical applications.</span>
+                    </div>
+                    <div class="viewer-content" id="skillDescription">
+                        Hover over a skill badge to inspect detailed applications and project use cases.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications & Achievements Section -->
+        <section id="certifications" class="certifications-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag font-code">06 // CREDENTIALS</span>
+                    <h2 class="section-title">Certifications & Achievements</h2>
+                    <div class="section-bar"></div>
+                </div>
+
+                <div class="certifications-grid">
+                    <!-- Category 1: Competitions -->
+                    <div class="cert-category-card reveal">
+                        <div class="cert-card-header">
+                            <!-- Trophy image SVG -->
+                            <svg class="cert-icon text-orange" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34M12 2a4 4 0 0 0-4 4v6h8V6a4 4 0 0 0-4-4z"/></svg>
+                            <h3>National Competitions</h3>
+                        </div>
+                        <ul class="cert-list">
+                            <li>
+                                <span class="cert-title">AICTE Yukti 2K26 National Innovation Competition</span>
+                                <span class="cert-meta">National Level Presenter</span>
+                            </li>
+                            <li>
+                                <span class="cert-title">HackEva 2025 Hackathon</span>
+                                <span class="cert-meta">Active Participant</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Category 2: Core Tech -->
+                    <div class="cert-category-card reveal delay-1">
+                        <div class="cert-card-header">
+                            <!-- Award SVG -->
+                            <svg class="cert-icon text-cyan" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                            <h3>Core Tech Credentials</h3>
+                        </div>
+                        <ul class="cert-list">
+                            <li>
+                                <span class="cert-title">CIQ Basics of Python</span>
+                                <span class="cert-meta">Cambridge International Qualifications, UK</span>
+                            </li>
+                            <li>
+                                <span class="cert-title">HP AI Course Certificate</span>
+                                <span class="cert-meta">HP LIFE Education</span>
+                            </li>
+                            <li>
+                                <span class="cert-title">Linux and Web Development Course</span>
+                                <span class="cert-meta">Core Certification</span>
+                            </li>
+                            <li>
+                                <span class="cert-title">Network Security Skills Certification</span>
+                                <span class="cert-meta">Vulnerability Assessment</span>
+                            </li>
+                            <li>
+                                <span class="cert-title">Arduino & IoT Workshop</span>
+                                <span class="cert-meta">Embedded Hardware Training</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Category 3: Design & Web -->
+                    <div class="cert-category-card reveal delay-2">
+                        <div class="cert-card-header">
+                            <!-- Palette SVG -->
+                            <svg class="cert-icon text-purple" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22C17.522 22 22 17.522 22 12C22 6.478 17.522 2 12 2C6.478 2 2 6.478 2 12C2 14.725 3.09 17.194 4.856 19C4.856 19 6 18 6 16C6 14 8 14 8 12C8 10 10 10 12 10C14 10 14 8 14 6C14 4.5 15.5 4 17 4C19 4 20 6.5 20 9C20 11.5 18 12.5 18 14.5C18 16.5 20 17 20 19C20 21 17.5 22 12 22z"/></svg>
+                            <h3>Design & Web</h3>
+                        </div>
+                        <ul class="cert-list">
+                            <li>
+                                <span class="cert-title">UI/UX Design Course</span>
+                                <span class="cert-meta">Figma & Wireframing Standards</span>
+                            </li>
+                            <li>
+                                <span class="cert-title">Building Websites Certificate</span>
+                                <span class="cert-meta">Coursera</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Category 4: Leadership -->
+                    <div class="cert-category-card reveal delay-3">
+                        <div class="cert-card-header">
+                            <!-- Users SVG -->
+                            <svg class="cert-icon text-orange" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <h3>Leadership & Values</h3>
+                        </div>
+                        <ul class="cert-list">
+                            <li>
+                                <span class="cert-title">Mahindra Quiet Power Program</span>
+                                <span class="cert-meta">Professional Readiness & Integrity</span>
+                            </li>
+                            <li>
+                                <span class="cert-title">Community Leadership & Values Program</span>
+                                <span class="cert-meta">Ramakrishna Ashram Foundation</span>
+                            </li>
+                            <li>
+                                <span class="cert-title">ICAT Certification</span>
+                                <span class="cert-meta">Industry Certification in Automotive Technology</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-tag font-code">07 // CONNECT</span>
+                    <h2 class="section-title">
+                        <svg class="header-3d-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="contactGradBack" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#FF5A5F" />
+                                    <stop offset="100%" stop-color="#8B5CF6" />
+                                </linearGradient>
+                                <linearGradient id="contactGradFront" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="rgba(255, 255, 255, 0.55)" />
+                                    <stop offset="100%" stop-color="rgba(255, 255, 255, 0.15)" />
+                                </linearGradient>
+                                <filter id="glassBlur3">
+                                    <feGaussianBlur stdDeviation="0.8" />
+                                </filter>
+                            </defs>
+                            <!-- Backplate Bubble -->
+                            <path d="M4 6h24a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-8l-6 4v-4H4a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3z" fill="url(#contactGradBack)" />
+                            <!-- Internal Airplane (Glowing) -->
+                            <path d="M10 14.5l11-4.5-4.5 11-2-4.5-4.5-2z" fill="#ffffff" opacity="0.9" />
+                            <!-- Front Glass Layer -->
+                            <path d="M8 10h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H16l-4 3v-3H8a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z" fill="url(#contactGradFront)" filter="url(#glassBlur3)" stroke="rgba(255, 255, 255, 0.4)" stroke-width="0.75" />
+                        </svg>
+                        Get In Touch
+                    </h2>
+                    <div class="section-bar"></div>
+                </div>
+
+                <!-- Circuit Hacker Mini-Game Widget -->
+                <div class="game-wrapper reveal">
+                    <div class="game-container terminal-mockup tilt-card" id="hackerGame">
+                        <div class="terminal-header">
+                            <div class="terminal-buttons">
+                                <span class="t-btn red"></span>
+                                <span class="t-btn yellow"></span>
+                                <span class="t-btn green"></span>
+                            </div>
+                            <div class="terminal-title font-code">circuit_hacker.py - Fix Sangamesh's Lab</div>
+                            <div class="terminal-action">
+                                <i data-lucide="gamepad-2" size="14"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="game-body font-code">
+                            <!-- Overlay Screen: Start Game -->
+                            <div class="game-overlay" id="gameOverlay">
+                                <div class="overlay-content">
+                                    <div class="alert-icon text-orange">
+                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                    </div>
+                                    <h3>SYSTEM DISRUPTED</h3>
+                                    <p>Sangamesh's smart lab has encountered IoT disconnected faults and code syntax errors. Close the loop to restore lab intelligence.</p>
+                                    <button type="button" class="btn btn-primary" id="startGameBtn">
+                                        <span>Start Diagnostic Routine</span>
+                                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="game-screen">
+                                <!-- Game Progress Header -->
+                                <div class="game-status-bar">
+                                    <div class="status-node active" id="node1"><span>1</span> IoT LINK</div>
+                                    <div class="status-node" id="node2"><span>2</span> PYTHON COMPILE</div>
+                                    <div class="status-node" id="node3"><span>3</span> AWS DEPLOY</div>
+                                </div>
+
+                                <!-- Level 1 Area (IoT/Arduino) -->
+                                <div class="game-level active" id="level1">
+                                    <div class="alert-box text-orange">
+                                        <svg class="alert-icon-svg animate-pulse" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                        <span>Warning: MQ2 Gas Sensor Disconnected!</span>
+                                    </div>
+                                    <p class="level-instr">Drag the green jumper wire onto Pin A0 on the Arduino shield (or click the wire and click Pin A0) to close the circuit.</p>
+                                    
+                                    <div class="circuit-canvas">
+                                        <!-- Arduino Mockup board -->
+                                        <div class="board-mockup arduino-board">
+                                            <div class="board-title">ARDUINO UNO R3</div>
+                                            <div class="board-pin-header">
+                                                <span class="pin">5V</span>
+                                                <span class="pin">GND</span>
+                                                <div class="pin target-pin" id="targetPinA0">
+                                                    <span class="pin-label">A0</span>
+                                                    <div class="pin-hole"></div>
+                                                </div>
+                                                <span class="pin">A1</span>
+                                                <span class="pin">A2</span>
+                                                <span class="pin">A3</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Draggable Wire Container -->
+                                        <div class="wire-container">
+                                            <div class="draggable-wire" id="dragWire" draggable="true">
+                                                <div class="wire-connector"></div>
+                                                <span class="wire-label">Jumper Wire A0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="level-footer">
+                                        <div class="level-timer">
+                                            Time Remaining: <span id="timer1" class="timer-countdown text-orange">10</span>s
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Level 2 Area (Python Code compilation) -->
+                                <div class="game-level" id="level2">
+                                    <div class="alert-box text-cyan">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="10" y1="22" x2="14" y2="2"/></svg>
+                                        <span>Syntax Error: Undefined Developer State!</span>
+                                    </div>
+                                    <p class="level-instr">Select the correct method from the options below to compile Sangamesh's status loop.</p>
+                                    
+                                    <div class="code-editor-mockup">
+                                        <pre><code><span class="syntax-keyword">class</span> Developer:
+    <span class="syntax-keyword">def</span> __init__(self):
+        self.name = <span class="syntax-string">"Sangamesh Athani"</span>
+    
+    <span class="syntax-keyword">def</span> get_status(self):
+        <span class="syntax-keyword">return</span> <span class="syntax-string">"Coding intelligence. Deploying hardware."</span>
+
+me = Developer()
+print(me.<span class="code-gap" id="codeGap">_______</span>())</code></pre>
+                                    </div>
+                                    
+                                    <div class="choices-container">
+                                        <button type="button" class="choice-btn" data-choice="run_error">run_error</button>
+                                        <button type="button" class="choice-btn" data-choice="get_status">get_status</button>
+                                        <button type="button" class="choice-btn" data-choice="break_code">break_code</button>
+                                    </div>
+                                </div>
+
+                                <!-- Level 3 Area (Server deployment) -->
+                                <div class="game-level" id="level3">
+                                    <div class="alert-box text-orange animate-pulse">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                                        <span>Deployment Failed: Port 8080 Blocked!</span>
+                                    </div>
+                                    <p class="level-instr">Reroute traffic to the secure SSL port (Port 443) before the request buffer overflows.</p>
+                                    
+                                    <div class="deployment-dashboard">
+                                        <div class="dial-container">
+                                            <button type="button" class="dial-button" id="rerouteBtn">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                                                <span>Reroute to Secure Port 443</span>
+                                            </button>
+                                        </div>
+                                        <div class="progress-bar-container">
+                                            <div class="progress-bar-fill" id="deployProgress"></div>
+                                        </div>
+                                    </div>
+                                    <div class="level-footer">
+                                        <div class="level-timer">
+                                            Buffer Overflow: <span id="timer3" class="timer-countdown text-orange">100%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Win / Achievement popup inside game panel -->
+                                <div class="game-achievement-card" id="achievementCard" style="display: none;">
+                                    <div class="pulse-wave"></div>
+                                    <div class="achievement-icon text-purple">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                                    </div>
+                                    <h4 id="achievementTitle">Achievement Unlocked!</h4>
+                                    <p id="achievementDesc">Success! You unlocked a portfolio milestone: ...</p>
+                                    <button type="button" class="btn btn-primary" id="nextLevelBtn">
+                                        <span>Proceed to Next Diagnostic</span>
+                                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                                    </button>
+                                </div>
+                                
+                                <!-- Final Win Screen -->
+                                <div class="game-final-win" id="finalWinScreen" style="display: none;">
+                                    <div class="win-icon text-purple">
+                                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    </div>
+                                    <h3>LAB FULLY RESTORED</h3>
+                                    <p>IoT sensor loop connected, status function compiled, and AWS secure routing deployed. You are officially a Master Hacker!</p>
+                                    <button type="button" class="btn btn-primary" id="connectBtn">
+                                        <span>Master Hacker! Connect with Sangamesh below 👇</span>
+                                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-grid">
+                    <!-- Contact Cards -->
+                    <div class="contact-info reveal">
+                        <h3 class="contact-subtitle">Let's build something intelligent.</h3>
+                        <p class="contact-lead-text">
+                            Whether you want to discuss a new hardware prototype, an AI automation pipeline, or a full-stack design concept, my inbox is always open.
+                        </p>
+
+                        <!-- Profile Layout: Side-by-side splits with photo on desktop -->
+                        <div class="contact-profile-layout">
+                            <div class="contact-photo-container">
+                                <img src="profile.jpg" alt="Sangamesh Athani" class="contact-photo">
+                                <div class="photo-glow"></div>
+                            </div>
+                            
+                            <div class="contact-cards-stack">
+                                <div class="contact-item-card static">
+                                    <div class="contact-item-icon location-icon">
+                                        <i data-lucide="map-pin"></i>
+                                    </div>
+                                    <div class="contact-item-text">
+                                        <span class="contact-label font-code">LOCATION</span>
+                                        <span class="contact-val">Bijapur, Karnataka, India</span>
+                                    </div>
+                                </div>
+
+                                <a href="mailto:sangmeshathani6@gmail.com" class="contact-item-card">
+                                    <div class="contact-item-icon email-icon">
+                                        <i data-lucide="mail"></i>
+                                    </div>
+                                    <div class="contact-item-text">
+                                        <span class="contact-label font-code">EMAIL</span>
+                                        <span class="contact-val">sangmeshathani6@gmail.com</span>
+                                    </div>
+                                    <i data-lucide="arrow-right" class="contact-item-arrow"></i>
+                                </a>
+
+                                <a href="https://www.linkedin.com/in/sangamesh29/" target="_blank" rel="noopener noreferrer" class="contact-item-card">
+                                    <div class="contact-item-icon linkedin-icon">
+                                        <!-- Brand LinkedIn SVG -->
+                                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                    </div>
+                                    <div class="contact-item-text">
+                                        <span class="contact-label font-code">LINKEDIN</span>
+                                        <span class="contact-val">linkedin.com/in/sangamesh29/</span>
+                                    </div>
+                                    <i data-lucide="arrow-right" class="contact-item-arrow"></i>
+                                </a>
+
+                                <a href="https://github.com/SangameshAthani" target="_blank" rel="noopener noreferrer" class="contact-item-card">
+                                    <div class="contact-item-icon github-icon">
+                                        <!-- Brand GitHub SVG -->
+                                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                    </div>
+                                    <div class="contact-item-text">
+                                        <span class="contact-label font-code">GITHUB</span>
+                                        <span class="contact-val">github.com/SangameshAthani</span>
+                                    </div>
+                                    <i data-lucide="arrow-right" class="contact-item-arrow"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form Card -->
+                    <div class="contact-form-wrapper reveal delay-1">
+                        <form action="https://formsubmit.co/sangmeshathani6@gmail.com" method="POST" id="contactForm" class="contact-form">
+                            <!-- FormSubmit Config Parameters -->
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_subject" value="New Portfolio Message!">
+                            <input type="hidden" name="_template" value="table">
+                            
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <input type="text" id="name" name="name" required placeholder=" " autocomplete="name">
+                                    <label for="name">Your Name</label>
+                                    <span class="input-line"></span>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <input type="email" id="email" name="email" required placeholder=" " autocomplete="email">
+                                    <label for="email">Email Address</label>
+                                    <span class="input-line"></span>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <textarea id="message" name="message" required placeholder=" " rows="5"></textarea>
+                                    <label for="message">Message</label>
+                                    <span class="input-line"></span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-submit" id="btnSubmitForm">
+                                <span>Transmit Message</span>
+                                <i data-lucide="send" class="btn-icon"></i>
+                            </button>
+                        </form>
+                        
+                        <!-- Dynamic Submission Feedback Overlay -->
+                        <div class="form-feedback-overlay" id="formFeedback">
+                            <div class="feedback-content">
+                                <div class="feedback-icon-spinner" id="feedbackSpinner"></div>
+                                <div class="feedback-icon-success hide" id="feedbackSuccess">
+                                    <i data-lucide="check-circle-2"></i>
+                                </div>
+                                <h4 id="feedbackTitle">Transmitting data...</h4>
+                                <p class="font-code" id="feedbackMsg">&gt; Syncing with SMTP relay...</p>
+                                <button type="button" class="btn btn-outline btn-sm hide" id="btnFeedbackClose">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-left">
+                <span class="footer-logo font-code">&lt;SANGAMESH.DEV /&gt;</span>
+                <p class="footer-tagline">B.E. CSE (AI & ML) • Hardware-Software Developer</p>
+            </div>
+            <div class="footer-right">
+                <p>&copy; 2026 Sangamesh Athani. All rights reserved.</p>
+                <p class="footer-subtext font-code">Form submissions routed to sangmeshathani6@gmail.com</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTopBtn" aria-label="Scroll to top">
+        <i data-lucide="chevrons-up"></i>
+    </button>
+
+    <!-- Project Details Modals -->
+    <!-- Modal 1: STAMP -->
+    <dialog class="project-modal" id="modal-stamp">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content-wrapper">
+            <div class="modal-header">
+                <div class="modal-title-area">
+                    <span class="modal-tag font-code">PROJECT // IoT & EMBEDDED</span>
+                    <h2>STAMP: Smart Transformer Monitoring System</h2>
+                </div>
+                <button class="modal-close" aria-label="Close Modal" data-close-modal="stamp">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-left">
+                    <h3>Project Overview</h3>
+                    <p>
+                        Developed a real-time monitor protecting distribution transformers from severe breakdowns. The system tracks multiple parameters and issues cellular alarms to grid engineers instantly upon breach.
+                    </p>
+                    <p>
+                        The implementation reduced manual grid-walk checks by **70%** and was selected to represent the college at the national AICTE Yukti 2K26 Innovation Forum.
+                    </p>
+
+                    <h3>Key Accomplishments</h3>
+                    <ul class="features-list">
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-purple"></i>
+                            <span><strong>Sensors Array:</strong> Tracks oil level, thermal anomalies, voltage surges, and output currents.</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-purple"></i>
+                            <span><strong>SMS Failover:</strong> Integrates a GSM transceiver triggering instant alert threads to operators.</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-purple"></i>
+                            <span><strong>National Presentation:</strong> Validated at AICTE Yukti Innovation forum.</span>
+                        </li>
+                    </ul>
+
+                    <h3>Tech Stack</h3>
+                    <div class="hardware-grid">
+                        <div class="hw-chip">Arduino</div>
+                        <div class="hw-chip">GSM SIM900A</div>
+                        <div class="hw-chip">Temp Sensors</div>
+                        <div class="hw-chip">Current Sensors</div>
+                        <div class="hw-chip">Embedded C++</div>
+                    </div>
+                </div>
+
+                <div class="modal-right">
+                    <h3>System Architecture</h3>
+                    <div class="schematic-container">
+                        <div class="schematic-node sensor">
+                            <span class="node-icon"><i data-lucide="activity"></i></span>
+                            <span class="node-label font-code">Transformer Sensors</span>
+                        </div>
+                        <div class="schematic-arrow font-code">| v (Data)</div>
+                        <div class="schematic-node controller">
+                            <span class="node-icon"><i data-lucide="cpu"></i></span>
+                            <span class="node-label font-code">Arduino Board</span>
+                        </div>
+                        <div class="schematic-branch">
+                            <div class="branch-left">
+                                <div class="schematic-arrow font-code">/ (SMS)</div>
+                                <div class="schematic-node alert">
+                                    <span class="node-icon"><i data-lucide="message-square"></i></span>
+                                    <span class="node-label font-code">GSM Module</span>
+                                </div>
+                            </div>
+                            <div class="branch-right">
+                                <div class="schematic-arrow font-code">\ (Display)</div>
+                                <div class="schematic-node relay">
+                                    <span class="node-icon"><i data-lucide="monitor"></i></span>
+                                    <span class="node-label font-code">Diagnostic Log</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Modal 2: Trip Master -->
+    <dialog class="project-modal" id="modal-tripmaster">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content-wrapper">
+            <div class="modal-header">
+                <div class="modal-title-area">
+                    <span class="modal-tag font-code">PROJECT // AI & FULLSTACK</span>
+                    <h2>Trip Master - AI Travel Planner App</h2>
+                </div>
+                <button class="modal-close" aria-label="Close Modal" data-close-modal="tripmaster">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-left">
+                    <h3>Project Overview</h3>
+                    <p>
+                        A responsive full-stack travel planner designed to construct dynamic vacation schedules. It features route suggestions, expenses management, and collaborative options.
+                    </p>
+                    <p>
+                        The planning core interfaces with recommendation APIs to process budget bounds and output personalized lists of places, local sights, and food spots.
+                    </p>
+
+                    <h3>Core Features</h3>
+                    <ul class="features-list">
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-cyan"></i>
+                            <span><strong>AI Recommendation:</strong> Generates highly tailored itineraries on the fly.</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-cyan"></i>
+                            <span><strong>Budget Allocation:</strong> Dynamic graphs demonstrating expenses grouped by transport, hotel, and food.</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-cyan"></i>
+                            <span><strong>Collaborative Share:</strong> Creates sharable links syncing travel details.</span>
+                        </li>
+                    </ul>
+
+                    <h3>Technologies Applied</h3>
+                    <div class="hardware-grid">
+                        <div class="hw-chip">HTML/CSS</div>
+                        <div class="hw-chip">JavaScript</div>
+                        <div class="hw-chip">Python</div>
+                        <div class="hw-chip">REST APIs</div>
+                        <div class="hw-chip">JSON Parsing</div>
+                    </div>
+                </div>
+
+                <div class="modal-right">
+                    <h3>Data Flow Pipeline</h3>
+                    <div class="schematic-container">
+                        <div class="schematic-node sensor">
+                            <span class="node-icon"><i data-lucide="settings"></i></span>
+                            <span class="node-label font-code">User Inputs</span>
+                        </div>
+                        <div class="schematic-arrow font-code">| v (JSON Query)</div>
+                        <div class="schematic-node controller">
+                            <span class="node-icon"><i data-lucide="brain"></i></span>
+                            <span class="node-label font-code">AI Route Core</span>
+                        </div>
+                        <div class="schematic-branch">
+                            <div class="branch-left">
+                                <div class="schematic-arrow font-code">/ (Budget)</div>
+                                <div class="schematic-node alert">
+                                    <span class="node-icon"><i data-lucide="dollar-sign"></i></span>
+                                    <span class="node-label font-code">Cost Tracker</span>
+                                </div>
+                            </div>
+                            <div class="branch-right">
+                                <div class="schematic-arrow font-code">\ (Points)</div>
+                                <div class="schematic-node relay">
+                                    <span class="node-icon"><i data-lucide="map"></i></span>
+                                    <span class="node-label font-code">Itinerary Render</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Modal 3: Network Security Monitoring Dashboard -->
+    <dialog class="project-modal" id="modal-security">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content-wrapper">
+            <div class="modal-header">
+                <div class="modal-title-area">
+                    <span class="modal-tag font-code">PROJECT // NETWORKING & LINUX</span>
+                    <h2>Network Security Monitoring Dashboard</h2>
+                </div>
+                <button class="modal-close" aria-label="Close Modal" data-close-modal="security">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-left">
+                    <h3>Project Overview</h3>
+                    <p>
+                        Developed a diagnostic utility that monitors local traffic, parses network protocols, and flags anomalies. The dashboard converts raw packets into easily understandable security alerts.
+                    </p>
+                    <p>
+                        Designed for Linux systems, it provides real-time updates and highlights vulnerabilities, helping system administrators defend against unauthorized access or port scanning attempts.
+                    </p>
+
+                    <h3>Core Features</h3>
+                    <ul class="features-list">
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-orange"></i>
+                            <span><strong>Anomaly Detection:</strong> Automatically flags signature patterns resembling network attacks.</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-orange"></i>
+                            <span><strong>Real-time Log Parsing:</strong> Continuously reads socket packet variables via Python scripts.</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-orange"></i>
+                            <span><strong>Vulnerability Identification:</strong> Identifies open ports and outdated protocols locally.</span>
+                        </li>
+                    </ul>
+
+                    <h3>Technologies Applied</h3>
+                    <div class="hardware-grid">
+                        <div class="hw-chip">Python</div>
+                        <div class="hw-chip">Linux OS</div>
+                        <div class="hw-chip">Bash Shell</div>
+                        <div class="hw-chip">Sockets API</div>
+                        <div class="hw-chip">TCP/IP Protocols</div>
+                    </div>
+                </div>
+
+                <div class="modal-right">
+                    <h3>Security Pipeline</h3>
+                    <div class="schematic-container">
+                        <div class="schematic-node sensor">
+                            <span class="node-icon"><i data-lucide="radio"></i></span>
+                            <span class="node-label font-code">Raw Packets</span>
+                        </div>
+                        <div class="schematic-arrow font-code">| v (Filters)</div>
+                        <div class="schematic-node controller">
+                            <span class="node-icon"><i data-lucide="filter"></i></span>
+                            <span class="node-label font-code">Parser Engine</span>
+                        </div>
+                        <div class="schematic-branch">
+                            <div class="branch-left">
+                                <div class="schematic-arrow font-code">/ (Threat)</div>
+                                <div class="schematic-node alert">
+                                    <span class="node-icon"><i data-lucide="alert-triangle"></i></span>
+                                    <span class="node-label font-code">Alert Dispatch</span>
+                                </div>
+                            </div>
+                            <div class="branch-right">
+                                <div class="schematic-arrow font-code">\ (Normal)</div>
+                                <div class="schematic-node relay">
+                                    <span class="node-icon"><i data-lucide="bar-chart-2"></i></span>
+                                    <span class="node-label font-code">Traffic Panel</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Modal 4: Personal Portfolio Website -->
+    <dialog class="project-modal" id="modal-portfolio">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content-wrapper">
+            <div class="modal-header">
+                <div class="modal-title-area">
+                    <span class="modal-tag font-code">PROJECT // DESIGN SYSTEM</span>
+                    <h2>Personal Portfolio Website</h2>
+                </div>
+                <button class="modal-close" aria-label="Close Modal" data-close-modal="portfolio">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-left">
+                    <h3>Project Overview</h3>
+                    <p>
+                        Designed and deployed a highly responsive portfolio to present projects and competencies. The architecture adheres strictly to clean UI/UX guidelines and accessibility standards.
+                    </p>
+                    <p>
+                        Features a double-theme engine, hardware schematics mapping, custom pointer trajectories, and fluid CSS transitions, ensuring a premium developer presentation.
+                    </p>
+
+                    <h3>Core Features</h3>
+                    <ul class="features-list">
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-purple"></i>
+                            <span><strong>Theme Controller:</strong> Seamlessly shifts between Dark and Light mode options.</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-purple"></i>
+                            <span><strong>3D Interactive Node Background:</strong> Floating perspective mesh matching mouse coordinates.</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check" class="list-bullet text-purple"></i>
+                            <span><strong>Optimized Asset Layouts:</strong> Custom-coded styling structures without bulky frameworks.</span>
+                        </li>
+                    </ul>
+
+                    <h3>Technologies Applied</h3>
+                    <div class="hardware-grid">
+                        <div class="hw-chip">HTML5</div>
+                        <div class="hw-chip">CSS Variables</div>
+                        <div class="hw-chip">JavaScript</div>
+                        <div class="hw-chip">Design Tokens</div>
+                        <div class="hw-chip">SEO Structure</div>
+                    </div>
+                </div>
+
+                <div class="modal-right">
+                    <h3>Front-End Architecture</h3>
+                    <div class="schematic-container">
+                        <div class="schematic-node sensor">
+                            <span class="node-icon"><i data-lucide="mouse-pointer"></i></span>
+                            <span class="node-label font-code">User Interactions</span>
+                        </div>
+                        <div class="schematic-arrow font-code">| v (Events)</div>
+                        <div class="schematic-node controller">
+                            <span class="node-icon"><i data-lucide="file-code"></i></span>
+                            <span class="node-label font-code">Theme & DOM Core</span>
+                        </div>
+                        <div class="schematic-branch">
+                            <div class="branch-left">
+                                <div class="schematic-arrow font-code">/ (Theme)</div>
+                                <div class="schematic-node alert">
+                                    <span class="node-icon"><i data-lucide="sun"></i></span>
+                                    <span class="node-label font-code">CSS Token Swap</span>
+                                </div>
+                            </div>
+                            <div class="branch-right">
+                                <div class="schematic-arrow font-code">\ (Canvas)</div>
+                                <div class="schematic-node relay">
+                                    <span class="node-icon"><i data-lucide="boxes"></i></span>
+                                    <span class="node-label font-code">3D Projected Nodes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- JS Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
