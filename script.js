@@ -725,14 +725,31 @@ Global variables use 742 bytes (36%) of dynamic memory.
             finalWinScreen.style.display = "none";
         }
 
-        // Show start screen overlay
+        // Show start screen overlay with interactive decrypt console logging
         startGameBtn.addEventListener("click", () => {
-            gameOverlay.style.opacity = "0";
+            startGameBtn.disabled = true;
+            const consoleBox = document.getElementById("overlayConsole");
+            if (consoleBox) {
+                consoleBox.innerHTML = `> INJECTING DECRYPTION EXPLOIT... OK<br>> CORRUPTING SEGMENT BLOCKS... OK`;
+                
+                setTimeout(() => {
+                    consoleBox.innerHTML += `<br>> DECRYPTING MAINPORT SECURE CODES... PASS`;
+                }, 400);
+                
+                setTimeout(() => {
+                    consoleBox.innerHTML += `<br>> INITIATING DIAGNOSTIC GRID RELAYS... READY`;
+                }, 850);
+            }
+
             setTimeout(() => {
-                gameOverlay.style.visibility = "hidden";
-                initGame();
-                startLevel1();
-            }, 400);
+                gameOverlay.style.opacity = "0";
+                setTimeout(() => {
+                    gameOverlay.style.visibility = "hidden";
+                    initGame();
+                    startLevel1();
+                    startGameBtn.disabled = false;
+                }, 400);
+            }, 1400);
         });
 
         // ==========================================
@@ -902,15 +919,39 @@ Global variables use 742 bytes (36%) of dynamic memory.
             level3Progress = 0;
             deployProgress.style.width = level3Progress + "%";
             
+            const banner = document.getElementById("alertBanner3");
+            if (banner) {
+                banner.textContent = "SYS_ATTACK: FLOODING DETECTED | MEMORY LEAK IMMINENT";
+                banner.className = "alert-banner blinking font-code";
+            }
+            levels[2].classList.remove("high-threat");
+            timer3Span.classList.remove("text-red");
+            timer3Span.classList.add("text-orange");
+            timer3Span.style.color = "";
+
             if (level3Interval) clearInterval(level3Interval);
             level3Interval = setInterval(() => {
                 if (!isLevel3Active) return;
-                level3Progress += 1.5;
+                
+                // Exponential acceleration threat index speed scaling
+                let increment = 0.8 + (level3Progress * 0.04);
+                level3Progress += increment;
+                
                 deployProgress.style.width = Math.min(level3Progress, 100) + "%";
                 
                 // Show countdown overflow percentage
                 const overflowChanceLeft = Math.max(Math.ceil(100 - level3Progress), 0);
                 timer3Span.textContent = overflowChanceLeft + "%";
+
+                if (level3Progress > 60) {
+                    levels[2].classList.add("high-threat");
+                    timer3Span.classList.remove("text-orange");
+                    timer3Span.classList.add("text-red");
+                    if (banner) {
+                        banner.textContent = "WARNING: BUFFER OVERFLOW IN PROGRESS! OVERHEAT REGISTERED!";
+                        banner.classList.add("blinking-fast");
+                    }
+                }
 
                 if (level3Progress >= 100) {
                     clearInterval(level3Interval);
@@ -921,6 +962,7 @@ Global variables use 742 bytes (36%) of dynamic memory.
 
         function failLevel3(reason) {
             isLevel3Active = false;
+            levels[2].classList.remove("high-threat");
             alert(reason + " Port blocked. Refreshing deployment configurations...");
             startLevel3();
         }
@@ -934,11 +976,18 @@ Global variables use 742 bytes (36%) of dynamic memory.
         function winLevel3() {
             isLevel3Active = false;
             clearInterval(level3Interval);
+            levels[2].classList.remove("high-threat");
             deployProgress.style.width = "100%";
             deployProgress.classList.add("success");
             timer3Span.textContent = "0% (Secure)";
-            timer3Span.classList.remove("text-orange");
+            timer3Span.classList.remove("text-orange", "text-red");
             timer3Span.style.color = "#10b981";
+            
+            const banner = document.getElementById("alertBanner3");
+            if (banner) {
+                banner.textContent = "SYSTEM RESOLVED: SSL ROUTING COMPLETE";
+                banner.className = "alert-banner resolved font-code";
+            }
             
             statusNodes[2].className = "status-node completed";
             setTimeout(() => {

@@ -2471,12 +2471,32 @@ html[data-theme="light"] .contact-item-card:hover {
     transition: var(--transition-theme);
 }
 
+/* Cyber CRT Scanline screen overlay */
+.game-container::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    z-index: 12;
+    background-size: 100% 4px, 6px 100%;
+    pointer-events: none;
+    opacity: 0.15;
+}
+
 .game-body {
     padding: 30px;
     min-height: 400px;
     position: relative;
     display: flex;
     flex-direction: column;
+    animation: crt-flicker 0.15s infinite;
+}
+
+@keyframes crt-flicker {
+    0% { opacity: 0.99; }
+    50% { opacity: 0.98; }
+    100% { opacity: 1; }
 }
 
 /* Start Screen Overlay */
@@ -2486,7 +2506,7 @@ html[data-theme="light"] .contact-item-card:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(6, 9, 19, 0.96);
+    background: rgba(4, 6, 12, 0.98);
     z-index: 10;
     display: flex;
     align-items: center;
@@ -2497,7 +2517,7 @@ html[data-theme="light"] .contact-item-card:hover {
 }
 
 html[data-theme="light"] .game-overlay {
-    background: rgba(244, 247, 250, 0.98);
+    background: rgba(240, 244, 248, 0.98);
 }
 
 .overlay-content {
@@ -2505,21 +2525,129 @@ html[data-theme="light"] .game-overlay {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
+    width: 100%;
 }
 
-.overlay-content h3 {
-    font-family: var(--font-heading);
-    font-size: 1.8rem;
-    margin: 0;
+/* Glitch Title Animation */
+.glitch-title {
+    font-size: 2rem;
+    font-weight: 800;
     color: var(--color-orange);
+    position: relative;
+    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                 -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+                 0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+    animation: glitch 1.5s infinite;
+    letter-spacing: 2px;
 }
 
-.overlay-content p {
+@keyframes glitch {
+    0% {
+        text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.3), -0.025em -0.05em 0 rgba(0, 255, 0, 0.3), 0.025em 0.05em 0 rgba(0, 0, 255, 0.3);
+    }
+    14% {
+        text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.3), -0.025em -0.05em 0 rgba(0, 255, 0, 0.3), 0.025em 0.05em 0 rgba(0, 0, 255, 0.3);
+    }
+    15% {
+        text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.5), 0.025em 0.025em 0 rgba(0, 255, 0, 0.5), -0.05em -0.05em 0 rgba(0, 0, 255, 0.5);
+    }
+    49% {
+        text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.5), 0.025em 0.025em 0 rgba(0, 255, 0, 0.5), -0.05em -0.05em 0 rgba(0, 0, 255, 0.5);
+    }
+    50% {
+        text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.4), 0.05em 0 0 rgba(0, 255, 0, 0.4), 0 -0.05em 0 rgba(0, 0, 255, 0.4);
+    }
+    99% {
+        text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.4), 0.05em 0 0 rgba(0, 255, 0, 0.4), 0 -0.05em 0 rgba(0, 0, 255, 0.4);
+    }
+    100% {
+        text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.3), -0.025em -0.025em 0 rgba(0, 255, 0, 0.3), -0.025em -0.05em 0 rgba(0, 0, 255, 0.3);
+    }
+}
+
+.overlay-text {
     color: var(--color-text-secondary);
-    margin: 0 0 10px 0;
+    margin: 0;
     font-size: 0.95rem;
     line-height: 1.5;
+}
+
+.overlay-console {
+    width: 100%;
+    max-width: 440px;
+    background: #02040c;
+    border: 1.5px solid rgba(249, 115, 22, 0.25);
+    border-radius: 8px;
+    padding: 14px 20px;
+    color: #10b981;
+    font-size: 0.8rem;
+    text-align: left;
+    min-height: 80px;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+    line-height: 1.6;
+    transition: var(--transition-theme);
+}
+
+html[data-theme="light"] .overlay-console {
+    background: #f1f5f9;
+    border-color: rgba(249, 115, 22, 0.15);
+    color: #0f766e;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+}
+
+/* Alert Tickers & Warnings */
+.alert-banner {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #ef4444;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.alert-banner.blinking {
+    animation: flashAlert 1.5s infinite alternate;
+}
+
+.alert-banner.blinking-fast {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    color: #ffffff;
+    animation: flashAlert 0.35s infinite alternate;
+}
+
+.alert-banner.resolved {
+    background: rgba(16, 185, 129, 0.08) !important;
+    border-color: rgba(16, 185, 129, 0.25) !important;
+    color: #10b981 !important;
+    animation: none !important;
+}
+
+@keyframes flashAlert {
+    0% { opacity: 0.45; }
+    100% { opacity: 1; }
+}
+
+/* High-Threat flash state */
+.high-threat {
+    animation: redBorderPulse 0.8s infinite alternate !important;
+}
+
+@keyframes redBorderPulse {
+    0% {
+        border-color: rgba(239, 68, 68, 0.25) !important;
+        box-shadow: 0 0 10px rgba(239, 68, 68, 0.08), var(--card-shadow) !important;
+    }
+    100% {
+        border-color: #ef4444 !important;
+        box-shadow: 0 0 25px rgba(239, 68, 68, 0.35), var(--card-shadow) !important;
+    }
 }
 
 .alert-icon {
@@ -2933,12 +3061,26 @@ html[data-theme="dark"] .dial-button:hover {
 .progress-bar-fill {
     width: 0%;
     height: 100%;
-    background: var(--color-orange);
+    background-image: repeating-linear-gradient(
+        45deg,
+        var(--color-orange),
+        var(--color-orange) 10px,
+        #1e1b18 10px,
+        #1e1b18 20px
+    );
+    box-shadow: 0 0 15px var(--color-orange);
     transition: width 0.1s linear, background-color 0.3s;
 }
 
 .progress-bar-fill.success {
-    background: #10b981;
+    background-image: repeating-linear-gradient(
+        45deg,
+        #10b981,
+        #10b981 10px,
+        #062b1e 10px,
+        #062b1e 20px
+    ) !important;
+    box-shadow: 0 0 15px #10b981 !important;
 }
 
 /* Achievement card overlay */

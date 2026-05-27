@@ -932,15 +932,16 @@ print(me.get_status())</div>
                             <!-- Overlay Screen: Start Game -->
                             <div class="game-overlay" id="gameOverlay">
                                 <div class="overlay-content">
-                                    <div class="alert-icon text-orange">
-                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                                    </div>
-                                    <h3>SYSTEM DISRUPTED</h3>
-                                    <p>Sangamesh's smart lab has encountered IoT disconnected faults and code syntax errors. Close the loop to restore lab intelligence.</p>
-                                    <button type="button" class="btn btn-primary" id="startGameBtn">
-                                        <span>Start Diagnostic Routine</span>
+                                    <div class="glitch-title font-code" data-text="MAINCODE COMPROMISED">MAINCODE COMPROMISED</div>
+                                    <p class="overlay-text">Sangamesh's lab mainframe has offline IoT terminals and broken compilation segments. Inject standard diagnostics to decrypt.</p>
+                                    <button type="button" class="btn btn-primary btn-cyber" id="startGameBtn">
+                                        <span>INJECT DECRYPTION RUN</span>
                                         <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                                     </button>
+                                    <div class="overlay-console font-code" id="overlayConsole">
+                                        &gt; CORE STATE: EMERGENCY_LOCK<br>
+                                        &gt; PENDING OVERRIDES: 3 DIAGNOSTIC FAULTS
+                                    </div>
                                 </div>
                             </div>
 
@@ -1026,6 +1027,7 @@ print(me.<span class="code-gap" id="codeGap">_______</span>())</code></pre>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
                                         <span>Deployment Failed: Port 8080 Blocked!</span>
                                     </div>
+                                    <div class="alert-banner blinking font-code" id="alertBanner3">SYS_ATTACK: FLOODING DETECTED | MEMORY LEAK IMMINENT</div>
                                     <p class="level-instr">Reroute traffic to the secure SSL port (Port 443) before the request buffer overflows.</p>
                                     
                                     <div class="deployment-dashboard">
