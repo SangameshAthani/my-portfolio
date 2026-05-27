@@ -842,6 +842,165 @@ html[data-theme="light"] .dashboard-card {
     font-weight: 700;
 }
 
+/* Tabs structure inside card */
+.dash-tabs {
+    display: flex;
+    gap: 16px;
+}
+
+.dash-tab {
+    background: transparent;
+    border: none;
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    padding: 4px 8px;
+    cursor: none; /* Uses custom cursor */
+    transition: color 0.3s, text-shadow 0.3s;
+    position: relative;
+}
+
+.dash-tab::after {
+    content: '';
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-cyan), var(--color-purple));
+    transition: width 0.3s;
+}
+
+.dash-tab:hover,
+.dash-tab.active {
+    color: var(--color-text-primary);
+}
+
+.dash-tab.active::after {
+    width: 100%;
+}
+
+/* Tab panes toggling logic */
+.tab-pane {
+    display: none;
+    animation: fadeInTab 0.4s ease;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+@keyframes fadeInTab {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Vibe Profile Tab layout details */
+.vibe-profile-grid {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.vibe-avatar-wrapper {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.vibe-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: luminosity;
+    opacity: 0.85;
+    transition: opacity 0.3s, mix-blend-mode 0.3s;
+}
+
+html[data-theme="light"] .vibe-avatar {
+    mix-blend-mode: multiply;
+    opacity: 0.9;
+}
+
+.vibe-avatar-wrapper:hover .vibe-avatar {
+    mix-blend-mode: normal;
+    opacity: 1;
+}
+
+.vibe-card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vibe-stat-item {
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.vibe-label {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+    font-weight: 700;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+}
+
+.vibe-val {
+    font-size: 0.85rem;
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.vibe-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 16px;
+    margin-top: 20px;
+}
+
+.share-toast {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    color: #10b981;
+    font-size: 0.8rem;
+    font-weight: 600;
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.share-toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@media (max-width: 480px) {
+    .vibe-profile-grid {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+        gap: 16px;
+    }
+    .vibe-footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}
+
 .pulse-indicator {
     width: 10px;
     height: 10px;

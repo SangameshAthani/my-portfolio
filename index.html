@@ -166,47 +166,92 @@ print(me.get_status())</div>
                         </div>
                     </div>
 
-                    <!-- Interactive telemetry / dashboard panel -->
+                    <!-- Interactive telemetry & vibe profile tabbed panel -->
                     <div class="about-dashboard reveal delay-2">
-                        <div class="dashboard-card">
+                        <div class="dashboard-card tabbed-card">
                             <div class="dash-header">
-                                <div class="dash-title font-code">&lt;SYSTEM_TELEMETRY&gt;</div>
+                                <div class="dash-tabs font-code">
+                                    <button type="button" class="dash-tab active" data-tab="telemetry">&lt;TELEMETRY&gt;</button>
+                                    <button type="button" class="dash-tab" data-tab="vibe">&lt;VIBE_PROFILE&gt;</button>
+                                </div>
                                 <span class="pulse-indicator"></span>
                             </div>
                             <div class="dash-body font-code">
-                                <div class="dash-stat">
-                                    <span class="dash-label">COGNITIVE_CORE:</span>
-                                    <span class="dash-value text-cyan">ACTIVE</span>
-                                </div>
-                                <div class="dash-stat">
-                                    <span class="dash-label">AI_ML_MODELS:</span>
-                                    <div class="dash-progress-track">
-                                        <div class="dash-progress-fill cyan-glow" style="width: 82%"></div>
+                                <!-- Telemetry Tab Pane -->
+                                <div class="tab-pane active" id="telemetryTab">
+                                    <div class="dash-stat">
+                                        <span class="dash-label">COGNITIVE_CORE:</span>
+                                        <span class="dash-value text-cyan">ACTIVE</span>
                                     </div>
-                                    <span class="dash-pct">82%</span>
-                                </div>
-                                <div class="dash-stat">
-                                    <span class="dash-label">EMBEDDED_IoT:</span>
-                                    <div class="dash-progress-track">
-                                        <div class="dash-progress-fill purple-glow" style="width: 90%"></div>
+                                    <div class="dash-stat">
+                                        <span class="dash-label">AI_ML_MODELS:</span>
+                                        <div class="dash-progress-track">
+                                            <div class="dash-progress-fill cyan-glow" style="width: 82%"></div>
+                                        </div>
+                                        <span class="dash-pct">82%</span>
                                     </div>
-                                    <span class="dash-pct">90%</span>
-                                </div>
-                                <div class="dash-stat">
-                                    <span class="dash-label">FULLSTACK_DEV:</span>
-                                    <div class="dash-progress-track">
-                                        <div class="dash-progress-fill orange-glow" style="width: 80%"></div>
+                                    <div class="dash-stat">
+                                        <span class="dash-label">EMBEDDED_IoT:</span>
+                                        <div class="dash-progress-track">
+                                            <div class="dash-progress-fill purple-glow" style="width: 90%"></div>
+                                        </div>
+                                        <span class="dash-pct">90%</span>
                                     </div>
-                                    <span class="dash-pct">80%</span>
+                                    <div class="dash-stat">
+                                        <span class="dash-label">FULLSTACK_DEV:</span>
+                                        <div class="dash-progress-track">
+                                            <div class="dash-progress-fill orange-glow" style="width: 80%"></div>
+                                        </div>
+                                        <span class="dash-pct">80%</span>
+                                    </div>
+                                    <div class="dash-stat">
+                                        <span class="dash-label">SYSTEM_UPTIME:</span>
+                                        <span class="dash-value text-purple">99.8%</span>
+                                    </div>
+                                    <div class="dash-console">
+                                        <div class="dash-console-line">&gt; Loading active sensors... OK</div>
+                                        <div class="dash-console-line">&gt; System initialized in dark mode...</div>
+                                        <div class="dash-console-line">&gt; Listening for user telemetry requests...</div>
+                                    </div>
                                 </div>
-                                <div class="dash-stat">
-                                    <span class="dash-label">SYSTEM_UPTIME:</span>
-                                    <span class="dash-value text-purple">99.8%</span>
-                                </div>
-                                <div class="dash-console">
-                                    <div class="dash-console-line">&gt; Loading active sensors... OK</div>
-                                    <div class="dash-console-line">&gt; System initialized in dark mode...</div>
-                                    <div class="dash-console-line">&gt; Listening for user telemetry requests...</div>
+
+                                <!-- Vibe Profile Tab Pane -->
+                                <div class="tab-pane" id="vibeTab">
+                                    <div class="vibe-profile-grid">
+                                        <div class="vibe-photo-area">
+                                            <div class="vibe-avatar-wrapper">
+                                                <img src="profile.jpg" alt="Sangamesh Athani" class="vibe-avatar">
+                                                <div class="vibe-avatar-glow"></div>
+                                            </div>
+                                        </div>
+                                        <div class="vibe-card-details">
+                                            <div class="vibe-stat-item">
+                                                <span class="vibe-label">CURRENT_VIBE:</span>
+                                                <span class="vibe-val text-cyan">Refactoring Edge Nodes ☕</span>
+                                            </div>
+                                            <div class="vibe-stat-item">
+                                                <span class="vibe-label">SOUNDTRACK:</span>
+                                                <span class="vibe-val text-purple">Synthwave Grid Relay 🎧</span>
+                                            </div>
+                                            <div class="vibe-stat-item">
+                                                <span class="vibe-label">PHILOSOPHY:</span>
+                                                <span class="vibe-val">"Automate everything except human connection."</span>
+                                            </div>
+                                            <div class="vibe-stat-item">
+                                                <span class="vibe-label">COFFEE_LEVEL:</span>
+                                                <span class="vibe-val text-orange">94% (Dark Roast)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="vibe-footer">
+                                        <button type="button" class="btn btn-outline btn-sm btn-share" id="btnQuickShare" aria-label="Quick Share Portfolio">
+                                            <i data-lucide="share-2" class="btn-icon-left"></i>
+                                            <span>Quick Share Profile</span>
+                                        </button>
+                                        <span class="share-toast font-code" id="shareToast">
+                                            <i data-lucide="check" class="btn-icon-left"></i> Copied Package!
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

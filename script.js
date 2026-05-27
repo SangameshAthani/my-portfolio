@@ -25,6 +25,67 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("theme", newTheme);
     });
 
+    // 1.1 Dashboard Tab Toggling (Telemetry vs Vibe Profile)
+    const dashTabs = document.querySelectorAll(".dash-tab");
+    const tabPanes = document.querySelectorAll(".tab-pane");
+
+    dashTabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            const targetTab = tab.getAttribute("data-tab");
+            
+            dashTabs.forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            tabPanes.forEach(pane => {
+                if (pane.id === `${targetTab}Tab`) {
+                    pane.classList.add("active");
+                } else {
+                    pane.classList.remove("active");
+                }
+            });
+
+            // Trigger Lucide icons bind
+            if (typeof lucide !== "undefined") {
+                lucide.createIcons();
+            }
+        });
+    });
+
+    // 1.2 Vibe Profile Quick Share Handler
+    const btnQuickShare = document.getElementById("btnQuickShare");
+    const shareToast = document.getElementById("shareToast");
+
+    if (btnQuickShare && shareToast) {
+        btnQuickShare.addEventListener("click", () => {
+            const shareText = `Sangamesh Athani - AI/ML & IoT Developer Portfolio\n⚡ "Automate everything except human connection."\n\nCheck out my projects & live diagnostics:\n🔗 https://sangameshathani29.netlify.app/`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: "Sangamesh Athani | Portfolio",
+                    text: shareText,
+                    url: "https://sangameshathani29.netlify.app/"
+                })
+                .catch(err => {
+                    // Fallback to Clipboard copy on error/dismiss
+                    copyToClipboard(shareText);
+                });
+            } else {
+                copyToClipboard(shareText);
+            }
+        });
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            shareToast.classList.add("show");
+            setTimeout(() => {
+                shareToast.classList.remove("show");
+            }, 2500);
+        }).catch(err => {
+            console.error("Clipboard copy failed: ", err);
+        });
+    }
+
 
     // 2. Immersive 3D Rotating Neural Network Canvas Background
     const canvas = document.getElementById("neuralCanvas");
