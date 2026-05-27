@@ -1143,11 +1143,9 @@ print(me.<span class="code-gap" id="codeGap">_______</span>())</code></pre>
 
                     <!-- Contact Form Card -->
                     <div class="contact-form-wrapper reveal delay-1">
-                        <form action="https://formsubmit.co/sangmeshathani6@gmail.com" method="POST" id="contactForm" class="contact-form">
-                            <!-- FormSubmit Config Parameters -->
-                            <input type="hidden" name="_captcha" value="false">
-                            <input type="hidden" name="_subject" value="New Portfolio Message!">
-                            <input type="hidden" name="_template" value="table">
+                        <form name="contact" method="POST" data-netlify="true" id="contactForm" class="contact-form">
+                            <!-- Netlify Forms configuration -->
+                            <input type="hidden" name="form-name" value="contact">
                             
                             <div class="form-row">
                                 <div class="input-group">
