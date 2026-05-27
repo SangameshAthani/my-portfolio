@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const ctx = canvas.getContext("2d");
 
     let nodes = [];
-    const maxNodesCount = 65;
+    const maxNodesCount = window.innerWidth < 768 ? 35 : 65;
     const maxLineDistance3D = 120;
     const focalLength = 300; // Focal length for perspective division
     
@@ -1045,34 +1045,43 @@ Global variables use 742 bytes (36%) of dynamic memory.
             glares.push(g);
         }
 
-        // Gyro tilt calculations on mousemove
+        // Gyro tilt calculations on mousemove (optimizing via requestAnimationFrame throttling)
+        let rAFToken = null;
         card.addEventListener("mousemove", (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            if (rAFToken) {
+                cancelAnimationFrame(rAFToken);
+            }
+            rAFToken = requestAnimationFrame(() => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
 
-            const percentX = (x - centerX) / centerX;
-            const percentY = (y - centerY) / centerY;
+                const percentX = (x - centerX) / centerX;
+                const percentY = (y - centerY) / centerY;
 
-            const maxTilt = 10; // degrees
-            const rotateX = -percentY * maxTilt;
-            const rotateY = percentX * maxTilt;
+                const maxTilt = 10; // degrees
+                const rotateX = -percentY * maxTilt;
+                const rotateY = percentX * maxTilt;
 
-            card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
-            // Update glare overlay position
-            glares.forEach((glare) => {
-                const glareX = percentX * 50 + 50;
-                const glareY = percentY * 50 + 50;
-                glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`;
+                // Update glare overlay position
+                glares.forEach((glare) => {
+                    const glareX = percentX * 50 + 50;
+                    const glareY = percentY * 50 + 50;
+                    glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`;
+                });
             });
         });
 
         // Reset transforms on mouseleave
         card.addEventListener("mouseleave", () => {
+            if (rAFToken) {
+                cancelAnimationFrame(rAFToken);
+            }
             card.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg)";
             glares.forEach((glare) => {
                 glare.style.background = "radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0) 0%, transparent 60%)";
@@ -1080,7 +1089,14 @@ Global variables use 742 bytes (36%) of dynamic memory.
         });
     });
 
-    // Inertial scroll depth-parallax animation
+    // Inertial scroll depth-parallax animation (cached query selectors to prevent layout reflow thrashing)
+    const parallaxCanvas = document.getElementById("neuralCanvas");
+    const parallaxHeaders = document.querySelectorAll(".section-header");
+    const parallaxExpItems = document.querySelectorAll(".timeline-item");
+    const parallaxProjCards = document.querySelectorAll(".project-card-wrapper");
+    const parallaxEduItems = document.querySelectorAll(".edu-item");
+    const parallaxGameWrapper = document.querySelector(".game-wrapper");
+
     let ticked = false;
     window.addEventListener("scroll", () => {
         if (!ticked) {
@@ -1088,14 +1104,12 @@ Global variables use 742 bytes (36%) of dynamic memory.
                 const scrollY = window.pageYOffset;
                 
                 // Parallax shift background 3D canvas
-                const canvas = document.getElementById("neuralCanvas");
-                if (canvas) {
-                    canvas.style.transform = `translateY(${scrollY * 0.15}px)`;
+                if (parallaxCanvas) {
+                    parallaxCanvas.style.transform = `translateY(${scrollY * 0.15}px)`;
                 }
 
                 // Parallax shift section headers slightly slower
-                const headers = document.querySelectorAll(".section-header");
-                headers.forEach((header) => {
+                parallaxHeaders.forEach((header) => {
                     const rect = header.getBoundingClientRect();
                     if (rect.top < window.innerHeight && rect.bottom > 0) {
                         header.style.transform = `translateY(${(window.innerHeight - rect.top) * 0.04}px)`;
@@ -1103,8 +1117,7 @@ Global variables use 742 bytes (36%) of dynamic memory.
                 });
 
                 // Parallax shift Experience timeline content wrapper item nodes
-                const expItems = document.querySelectorAll(".timeline-item");
-                expItems.forEach((item, idx) => {
+                parallaxExpItems.forEach((item, idx) => {
                     const rect = item.getBoundingClientRect();
                     if (rect.top < window.innerHeight && rect.bottom > 0) {
                         const speed = (idx % 2 === 0) ? 0.025 : -0.015;
@@ -1113,8 +1126,7 @@ Global variables use 742 bytes (36%) of dynamic memory.
                 });
 
                 // Parallax shift Projects card wrappers
-                const projCards = document.querySelectorAll(".project-card-wrapper");
-                projCards.forEach((card, idx) => {
+                parallaxProjCards.forEach((card, idx) => {
                     const rect = card.getBoundingClientRect();
                     if (rect.top < window.innerHeight && rect.bottom > 0) {
                         const speed = (idx % 2 === 0) ? 0.025 : -0.015;
@@ -1123,8 +1135,7 @@ Global variables use 742 bytes (36%) of dynamic memory.
                 });
 
                 // Parallax shift Education timeline wrapper item nodes
-                const eduItems = document.querySelectorAll(".edu-item");
-                eduItems.forEach((item, idx) => {
+                parallaxEduItems.forEach((item, idx) => {
                     const rect = item.getBoundingClientRect();
                     if (rect.top < window.innerHeight && rect.bottom > 0) {
                         const speed = (idx % 2 === 0) ? 0.025 : -0.015;
@@ -1133,11 +1144,10 @@ Global variables use 742 bytes (36%) of dynamic memory.
                 });
 
                 // Parallax shift Mini-game container wrapper wrapper
-                const gameWrapper = document.querySelector(".game-wrapper");
-                if (gameWrapper) {
-                    const rect = gameWrapper.getBoundingClientRect();
+                if (parallaxGameWrapper) {
+                    const rect = parallaxGameWrapper.getBoundingClientRect();
                     if (rect.top < window.innerHeight && rect.bottom > 0) {
-                        gameWrapper.style.transform = `translateY(${(window.innerHeight - rect.top) * 0.02}px)`;
+                        parallaxGameWrapper.style.transform = `translateY(${(window.innerHeight - rect.top) * 0.02}px)`;
                     }
                 }
                 
