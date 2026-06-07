@@ -644,29 +644,36 @@ Global variables use 742 bytes (36%) of dynamic memory.
                 feedbackMsg.innerHTML = `&gt; Packing telemetry variables (Sender: ${nameVal})<br>&gt; Performing anti-spam integrity evaluation... PASS`;
             }, 2200);
 
-            // Execute actual AJAX request to Netlify Forms
+            // Execute actual AJAX request to FormSubmit API
             setTimeout(() => {
-                feedbackMsg.innerHTML = `&gt; Dispatching encrypted payload to Netlify server...`;
+                feedbackMsg.innerHTML = `&gt; Dispatching encrypted payload to secure SMTP relay...`;
                 
-                const formData = new FormData(contactForm);
-
-                fetch("/", {
+                fetch("https://formsubmit.co/ajax/sangmeshtahani6@gmail.com", {
                     method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: new URLSearchParams(formData).toString()
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name: nameVal,
+                        email: emailVal,
+                        message: msgVal,
+                        _subject: `New Portfolio Message from ${nameVal}`,
+                        _captcha: "false"
+                    })
                 })
                 .then(response => {
                     if (response.ok) {
-                        return response;
+                        return response.json();
                     }
-                    throw new Error("Netlify Forms relay error");
+                    throw new Error("SMTP mail relay error");
                 })
                 .then(data => {
                     // Success state
                     feedbackSpinner.classList.add("hide");
                     feedbackSuccess.classList.remove("hide");
                     feedbackTitle.textContent = "Transmission Complete";
-                    feedbackMsg.innerHTML = `&gt; Message successfully routed to Netlify Forms.<br>&gt; SHA-256 Checksum verified. I will reach out to you shortly!`;
+                    feedbackMsg.innerHTML = `&gt; Message successfully routed to SMTP mail server.<br>&gt; Email queued for delivery. I will reach out to you shortly!`;
                     btnFeedbackClose.classList.remove("hide");
                     
                     // Refresh interactive cursor triggers in case items were locked
