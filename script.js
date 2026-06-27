@@ -1442,4 +1442,96 @@ Global variables use 742 bytes (36%) of dynamic memory.
             });
         });
     }
+
+    // 11. Interactive Live AI Agent (Motion AI Model) Mechanics
+    const agentAvatar = document.getElementById("animeAgentAvatar");
+    const cognitionText = document.getElementById("agentCognitionText");
+    const pulseRing = document.getElementById("pulseRing");
+
+    if (agentAvatar && cognitionText && pulseRing) {
+        function triggerAgentGlitch() {
+            agentAvatar.classList.add("glitch-flash");
+            cognitionText.textContent = "SYNCING...";
+            
+            setTimeout(() => {
+                agentAvatar.classList.remove("glitch-flash");
+                cognitionText.textContent = "ACTIVE";
+            }, 600);
+        }
+
+        // Trigger glitch on load
+        triggerAgentGlitch();
+
+        // Trigger glitch when a new section enters viewport (using Motion.inView)
+        if (typeof Motion !== "undefined") {
+            const { inView } = Motion;
+            document.querySelectorAll("section").forEach(sec => {
+                inView(sec, () => {
+                    triggerAgentGlitch();
+                    cognitionText.textContent = "ANALYZING...";
+                    setTimeout(() => {
+                        if (cognitionText.textContent === "ANALYZING...") {
+                            cognitionText.textContent = "ACTIVE";
+                        }
+                    }, 1200);
+                });
+            });
+        }
+
+        // Mouse-Following Perspective Tracking (2.5D Eye/Head simulation)
+        let rAFToken = null;
+        window.addEventListener("mousemove", (e) => {
+            if (rAFToken) {
+                cancelAnimationFrame(rAFToken);
+            }
+            rAFToken = requestAnimationFrame(() => {
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                
+                const percentX = (e.clientX - centerX) / centerX;
+                const percentY = (e.clientY - centerY) / centerY;
+
+                const rotateX = -percentY * 10;
+                const rotateY = percentX * 10;
+
+                agentAvatar.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+        });
+
+        document.addEventListener("mouseleave", () => {
+            if (rAFToken) {
+                cancelAnimationFrame(rAFToken);
+            }
+            agentAvatar.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg)";
+        });
+
+        // Skill-Triggered Nod and Pulse Animation
+        const skillBadges = document.querySelectorAll(".skill-badge");
+        skillBadges.forEach(badge => {
+            badge.addEventListener("mouseenter", () => {
+                const skillName = badge.querySelector("span").textContent.toUpperCase();
+                cognitionText.textContent = skillName;
+
+                // Nod Approval
+                agentAvatar.classList.add("nod-approval");
+                setTimeout(() => {
+                    agentAvatar.classList.remove("nod-approval");
+                }, 650);
+
+                // Pulse Wave
+                pulseRing.classList.add("pulse-active");
+                setTimeout(() => {
+                    pulseRing.classList.remove("pulse-active");
+                }, 800);
+            });
+
+            badge.addEventListener("mouseleave", () => {
+                setTimeout(() => {
+                    if (cognitionText.textContent === badge.querySelector("span").textContent.toUpperCase()) {
+                        cognitionText.textContent = "ACTIVE";
+                    }
+                }, 1000);
+            });
+        });
+    }
 });
