@@ -1327,7 +1327,6 @@ Global variables use 742 bytes (36%) of dynamic memory.
                 });
             });
         }
-        });
     });
 
     // Inertial scroll depth-parallax animation (cached query selectors to prevent layout reflow thrashing)
