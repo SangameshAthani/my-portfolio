@@ -194,9 +194,9 @@ document.addEventListener("DOMContentLoaded", () => {
             let fillColor;
             
             if (currentTheme === "light") {
-                fillColor = this.colorType === "cyan" ? "rgba(37, 99, 235, 0.6)" : "rgba(13, 148, 136, 0.6)"; // Royal Blue or Teal
+                fillColor = this.colorType === "cyan" ? "rgba(20, 184, 166, 0.6)" : "rgba(249, 115, 22, 0.6)"; // Sage-Teal or Tangerine-Copper
             } else {
-                fillColor = this.colorType === "cyan" ? "rgba(6, 182, 212, 0.75)" : "rgba(168, 85, 247, 0.75)"; // Cyan or Purple
+                fillColor = this.colorType === "cyan" ? "rgba(16, 185, 129, 0.75)" : "rgba(168, 85, 247, 0.75)"; // Neo-Mint or Cosmic Lavender
             }
 
             return {
@@ -257,9 +257,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     
                     // Setup stroke color
                     if (currentTheme === "light") {
-                        ctx.strokeStyle = `rgba(37, 99, 235, ${opacity})`;
+                        ctx.strokeStyle = `rgba(20, 184, 166, ${opacity})`; // Sage-Teal
                     } else {
-                        ctx.strokeStyle = `rgba(6, 182, 212, ${opacity})`;
+                        ctx.strokeStyle = `rgba(16, 185, 129, ${opacity})`; // Neo-Mint
                     }
                     
                     ctx.lineWidth = 0.7 * ((focalLength / (focalLength + (nodes[i].z + nodes[j].z)/2)));
@@ -495,24 +495,67 @@ Global variables use 742 bytes (36%) of dynamic memory.
     }
 
 
-    // 8. Scroll-Reveal Animation Observers
+    // 8. Scroll-Reveal Animation using Motion (or IntersectionObserver fallback)
     const revealElements = document.querySelectorAll(".reveal");
 
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("active");
-                observer.unobserve(entry.target);
-            }
+    if (typeof Motion !== "undefined") {
+        const { animate, inView, stagger } = Motion;
+        
+        revealElements.forEach((el) => {
+            inView(el, ({ target }) => {
+                // If it is a stagger wrapper, stagger animate its children
+                if (target.classList.contains("stagger-wrapper")) {
+                    const children = target.querySelectorAll(".timeline-item, .edu-item, .project-card-wrapper, .cert-category-card");
+                    if (children.length > 0) {
+                        target.classList.add("active");
+                        children.forEach(c => {
+                            c.style.opacity = 0;
+                            c.style.transform = "translateY(30px)";
+                        });
+                        animate(
+                            children,
+                            { opacity: [0, 1], y: [30, 0] },
+                            { 
+                                delay: stagger(0.15),
+                                type: "spring",
+                                stiffness: 50,
+                                damping: 15
+                            }
+                        );
+                        return;
+                    }
+                }
+                
+                // Otherwise do single reveal
+                animate(
+                    target,
+                    { opacity: [0, 1], y: [30, 0] },
+                    { 
+                        type: "spring",
+                        stiffness: 50,
+                        damping: 15
+                    }
+                );
+                target.classList.add("active");
+            }, { margin: "0px 0px -40px 0px" });
         });
-    }, {
-        threshold: 0.10,
-        rootMargin: "0px 0px -40px 0px"
-    });
+    } else {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("active");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.10,
+            rootMargin: "0px 0px -40px 0px"
+        });
 
-    revealElements.forEach((el) => {
-        revealObserver.observe(el);
-    });
+        revealElements.forEach((el) => {
+            revealObserver.observe(el);
+        });
+    }
 
 
     // 9. Skill badges Hover Inspection Panel
@@ -1118,7 +1161,6 @@ Global variables use 742 bytes (36%) of dynamic memory.
     // ==========================================================================
     const tiltCards = document.querySelectorAll(".tilt-card");
     tiltCards.forEach((card) => {
-        // Find or create glare masks
         const glares = [];
         if (card.classList.contains("flip-card")) {
             const front = card.querySelector(".card-front");
@@ -1142,10 +1184,8 @@ Global variables use 742 bytes (36%) of dynamic memory.
                 glares.push(gBack);
             }
             
-            // Mobile tap-to-flip support
             card.addEventListener("click", function(e) {
                 if (window.innerWidth <= 1024) {
-                    // Prevent flipping if clicking a button/link inside back card
                     if (e.target.closest("button") || e.target.closest("a")) {
                         return;
                     }
@@ -1162,47 +1202,131 @@ Global variables use 742 bytes (36%) of dynamic memory.
             glares.push(g);
         }
 
-        // Gyro tilt calculations on mousemove (optimizing via requestAnimationFrame throttling)
-        let rAFToken = null;
-        card.addEventListener("mousemove", (e) => {
-            if (rAFToken) {
-                cancelAnimationFrame(rAFToken);
-            }
-            rAFToken = requestAnimationFrame(() => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+        if (typeof Motion !== "undefined") {
+            const { animate } = Motion;
 
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                const percentX = (x - centerX) / centerX;
-                const percentY = (y - centerY) / centerY;
-
-                const maxTilt = 10; // degrees
-                const rotateX = -percentY * maxTilt;
-                const rotateY = percentX * maxTilt;
-
-                card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-
-                // Update glare overlay position
-                glares.forEach((glare) => {
-                    const glareX = percentX * 50 + 50;
-                    const glareY = percentY * 50 + 50;
-                    glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`;
+            card.addEventListener("mouseenter", () => {
+                animate(card, { 
+                    "--card-scale": 1.03, 
+                    "--card-translate-y": "-6px" 
+                }, { 
+                    type: "spring", 
+                    stiffness: 120, 
+                    damping: 14 
                 });
             });
-        });
 
-        // Reset transforms on mouseleave
-        card.addEventListener("mouseleave", () => {
-            if (rAFToken) {
-                cancelAnimationFrame(rAFToken);
-            }
-            card.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg)";
-            glares.forEach((glare) => {
-                glare.style.background = "radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0) 0%, transparent 60%)";
+            card.addEventListener("mousedown", () => {
+                animate(card, { 
+                    "--card-scale": 0.98,
+                    "--card-translate-y": "-3px"
+                }, { 
+                    duration: 0.1 
+                });
             });
+
+            card.addEventListener("mouseup", () => {
+                animate(card, { 
+                    "--card-scale": 1.03,
+                    "--card-translate-y": "-6px"
+                }, { 
+                    duration: 0.15 
+                });
+            });
+
+            let rAFToken = null;
+            card.addEventListener("mousemove", (e) => {
+                if (rAFToken) {
+                    cancelAnimationFrame(rAFToken);
+                }
+                rAFToken = requestAnimationFrame(() => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const percentX = (x - centerX) / centerX;
+                    const percentY = (y - centerY) / centerY;
+
+                    const maxTilt = 10;
+                    const rotateX = -percentY * maxTilt;
+                    const rotateY = percentX * maxTilt;
+
+                    card.style.setProperty("--card-rotate-x", rotateX + "deg");
+                    card.style.setProperty("--card-rotate-y", rotateY + "deg");
+
+                    glares.forEach((glare) => {
+                        const glareX = percentX * 50 + 50;
+                        const glareY = percentY * 50 + 50;
+                        glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.18) 0%, transparent 60%)`;
+                        glare.style.opacity = 1;
+                    });
+                });
+            });
+
+            card.addEventListener("mouseleave", () => {
+                if (rAFToken) {
+                    cancelAnimationFrame(rAFToken);
+                }
+                animate(card, { 
+                    "--card-scale": 1.0, 
+                    "--card-translate-y": "0px",
+                    "--card-rotate-x": "0deg",
+                    "--card-rotate-y": "0deg"
+                }, { 
+                    type: "spring", 
+                    stiffness: 100, 
+                    damping: 15 
+                });
+                
+                glares.forEach((glare) => {
+                    animate(glare, { opacity: 0 }, { duration: 0.3 });
+                });
+            });
+
+        } else {
+            let rAFToken = null;
+            card.addEventListener("mousemove", (e) => {
+                if (rAFToken) {
+                    cancelAnimationFrame(rAFToken);
+                }
+                rAFToken = requestAnimationFrame(() => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const percentX = (x - centerX) / centerX;
+                    const percentY = (y - centerY) / centerY;
+
+                    const maxTilt = 10;
+                    const rotateX = -percentY * maxTilt;
+                    const rotateY = percentX * maxTilt;
+
+                    card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+                    glares.forEach((glare) => {
+                        const glareX = percentX * 50 + 50;
+                        const glareY = percentY * 50 + 50;
+                        glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.15) 0%, transparent 60%)`;
+                    });
+                });
+            });
+
+            card.addEventListener("mouseleave", () => {
+                if (rAFToken) {
+                    cancelAnimationFrame(rAFToken);
+                }
+                card.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg)";
+                glares.forEach((glare) => {
+                    glare.style.background = "radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0) 0%, transparent 60%)";
+                });
+            });
+        }
         });
     });
 
@@ -1273,4 +1397,50 @@ Global variables use 742 bytes (36%) of dynamic memory.
             ticked = true;
         }
     }, { passive: true });
+
+    // 10. Shared Focus Underline Animation for Contact Form (Framer Motion layoutId simulation)
+    const contactFormWrapper = document.querySelector(".contact-form-wrapper");
+    const formFields = document.querySelectorAll("#contactForm input, #contactForm textarea");
+
+    if (contactFormWrapper && formFields.length > 0 && typeof Motion !== "undefined") {
+        const { animate } = Motion;
+        
+        const sharedUnderline = document.createElement("div");
+        sharedUnderline.className = "shared-focus-underline";
+        contactFormWrapper.appendChild(sharedUnderline);
+
+        formFields.forEach(field => {
+            field.addEventListener("focus", () => {
+                const fieldRect = field.getBoundingClientRect();
+                const wrapperRect = contactFormWrapper.getBoundingClientRect();
+
+                const relativeLeft = fieldRect.left - wrapperRect.left;
+                const relativeTop = fieldRect.bottom - wrapperRect.top - 2; 
+                const width = fieldRect.width;
+
+                sharedUnderline.style.opacity = 1;
+                animate(
+                    sharedUnderline,
+                    { 
+                        left: `${relativeLeft}px`,
+                        top: `${relativeTop}px`,
+                        width: `${width}px`
+                    },
+                    { 
+                        type: "spring",
+                        stiffness: 150,
+                        damping: 18
+                    }
+                );
+            });
+
+            field.addEventListener("blur", () => {
+                setTimeout(() => {
+                    if (document.activeElement !== field && !Array.from(formFields).includes(document.activeElement)) {
+                        sharedUnderline.style.opacity = 0;
+                    }
+                }, 50);
+            });
+        });
+    }
 });

@@ -19,6 +19,8 @@
 
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Motion (Framer Motion vanilla) CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/motion@11.11.17/dist/motion.js"></script>
 </head>
 <body>
     <!-- Custom Glowing Pointer & Trailing Cursor Ring -->
@@ -318,7 +320,7 @@ print(me.get_status())</div>
                     <div class="section-bar"></div>
                 </div>
 
-                <div class="timeline-container">
+                <div class="timeline-container stagger-wrapper">
                     <div class="timeline-item reveal">
                         <div class="timeline-dot"></div>
                         <div class="timeline-date font-code">2025 (Remote)</div>
@@ -382,7 +384,7 @@ print(me.get_status())</div>
                     <div class="section-bar"></div>
                 </div>
 
-                <div class="edu-timeline">
+                <div class="edu-timeline stagger-wrapper">
                     <!-- Education 1 -->
                     <div class="edu-item reveal">
                         <div class="edu-node"></div>
@@ -483,7 +485,7 @@ print(me.get_status())</div>
                 </div>
 
                 <!-- Grid of Interactive Project Cards -->
-                <div class="projects-grid">
+                <div class="projects-grid stagger-wrapper">
                     <!-- Project 1 -->
                     <div class="project-card-wrapper">
                         <div class="project-card tilt-card flip-card reveal" data-project="stamp">
@@ -851,7 +853,7 @@ print(me.get_status())</div>
                     <div class="section-bar"></div>
                 </div>
 
-                <div class="certifications-grid">
+                <div class="certifications-grid stagger-wrapper">
                     <!-- Category 1: Competitions -->
                     <div class="cert-category-card reveal">
                         <div class="cert-card-header">
@@ -1154,9 +1156,23 @@ print(me.<span class="code-gap" id="codeGap">_______</span>())</code></pre>
                         </p>
 
                         <!-- Profile Layout: Side-by-side splits with photo on desktop -->
-                        <div class="contact-profile-layout">
+                            <!-- SVG Blob Morphing Mask Definitions -->
+                            <svg class="svg-blob-defs" width="0" height="0" style="position: absolute;">
+                                <defs>
+                                    <clipPath id="blobClip" clipPathUnits="objectBoundingBox">
+                                        <path d="M 0.5,0.05 C 0.75,0.02 0.95,0.22 0.98,0.45 C 1.01,0.68 0.81,0.88 0.58,0.95 C 0.35,1.02 0.08,0.85 0.03,0.62 C -0.02,0.39 0.25,0.08 0.5,0.05 Z">
+                                            <animate attributeName="d" dur="12s" repeatCount="indefinite"
+                                                values="
+                                                    M 0.5,0.05 C 0.75,0.02 0.95,0.22 0.98,0.45 C 1.01,0.68 0.81,0.88 0.58,0.95 C 0.35,1.02 0.08,0.85 0.03,0.62 C -0.02,0.39 0.25,0.08 0.5,0.05 Z;
+                                                    M 0.5,0.02 C 0.8,0.08 0.98,0.3 0.95,0.55 C 0.92,0.8 0.75,0.95 0.5,0.98 C 0.25,1.01 0.05,0.8 0.02,0.55 C -0.01,0.3 0.2,0.05 0.5,0.02 Z;
+                                                    M 0.5,0.05 C 0.75,0.02 0.95,0.22 0.98,0.45 C 1.01,0.68 0.81,0.88 0.58,0.95 C 0.35,1.02 0.08,0.85 0.03,0.62 C -0.02,0.39 0.25,0.08 0.5,0.05 Z
+                                                " />
+                                        </path>
+                                    </clipPath>
+                                </defs>
+                            </svg>
                             <div class="contact-photo-container">
-                                <img src="profile.jpg" alt="Sangamesh Athani" class="contact-photo">
+                                <img src="profile.jpg" alt="Sangamesh Athani" class="contact-photo" style="clip-path: url(#blobClip);">
                                 <div class="photo-glow"></div>
                             </div>
                             
