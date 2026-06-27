@@ -1441,7 +1441,8 @@ Global variables use 742 bytes (36%) of dynamic memory.
                 }, 50);
             });
         });
-        // ==========================================================================
+    }
+    // ==========================================================================
     // 11. "The Sandbox" 3D Open-World Driving Simulator
     // ==========================================================================
     const modalSandbox = document.getElementById("modal-sandbox");
