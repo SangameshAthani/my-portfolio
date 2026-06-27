@@ -505,7 +505,7 @@ Global variables use 742 bytes (36%) of dynamic memory.
             inView(el, ({ target }) => {
                 // If it is a stagger wrapper, stagger animate its children
                 if (target.classList.contains("stagger-wrapper")) {
-                    const children = target.querySelectorAll(".timeline-item, .edu-item, .project-card-wrapper, .cert-category-card");
+                    const children = target.querySelectorAll(".timeline-item, .edu-item, .project-card-wrapper, .cert-category-card, .bio-paragraph");
                     if (children.length > 0) {
                         target.classList.add("active");
                         children.forEach(c => {

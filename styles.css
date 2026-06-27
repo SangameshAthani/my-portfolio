@@ -24,6 +24,7 @@
     --border-hover: rgba(16, 185, 129, 0.35);
     --glass-blur: blur(20px) saturate(185%);
     --card-shadow: 0 12px 40px -15px rgba(2, 4, 12, 0.8);
+    --color-bio-text: #F8FAFC;
     
     /* Global shared styles */
     --font-heading: 'Outfit', sans-serif;
@@ -62,6 +63,7 @@ html[data-theme="light"] {
     --border-hover: rgba(20, 184, 166, 0.35);
     --glass-blur: blur(12px);
     --card-shadow: 0 12px 35px -15px rgba(30, 27, 75, 0.08);
+    --color-bio-text: #1E293B;
 }
 
 * {
@@ -954,7 +956,7 @@ html[data-theme="light"] .vibe-identity-card {
 
 .vibe-profile-grid {
     display: grid;
-    grid-template-columns: 90px 1fr;
+    grid-template-columns: 1fr;
     gap: 20px;
     align-items: center;
     text-align: left;
@@ -1841,10 +1843,7 @@ html[data-theme="light"] .dash-console {
 
 /* Photo and stack grid layout */
 .contact-profile-layout {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: 24px;
-    align-items: center;
+    display: block;
 }
 
 .contact-photo-container {
@@ -3901,4 +3900,29 @@ html[data-theme="dark"] .contact-form-wrapper.spotlight {
 @keyframes floatTerminal {
     0%, 100% { transform: translateY(0px) rotate(-0.5deg); }
     50% { transform: translateY(-10px) rotate(0.5deg); }
+}
+
+/* Glassmorphic panel and styling for the premium about bio */
+.about-bio-panel {
+    background: var(--bg-surface);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: var(--card-shadow);
+    text-align: left;
+    color: var(--color-bio-text);
+    transition: var(--transition-theme);
+}
+
+.bio-paragraph {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    color: inherit;
+}
+
+.bio-paragraph:last-child {
+    margin-bottom: 0;
 }
