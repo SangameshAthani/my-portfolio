@@ -19,6 +19,8 @@
 
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Motion (Framer Motion vanilla) CDN -->
     <script src="https://cdn.jsdelivr.net/npm/motion@11.11.17/dist/motion.js"></script>
 </head>
@@ -644,6 +646,52 @@ print(me.get_status())</div>
                                             <button type="button" class="project-cta-btn font-code" id="btn-project-portfolio">
                                                 <span>Analyze System</span>
                                                 <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 5: The Sandbox Simulator -->
+                    <div class="project-card-wrapper">
+                        <div class="project-card tilt-card flip-card reveal delay-3" data-project="sandbox">
+                            <div class="card-inner">
+                                <!-- Front Side -->
+                                <div class="card-front">
+                                    <div class="card-glow"></div>
+                                    <div class="project-image-fallback orange">
+                                        <i data-lucide="gamepad-2" class="project-icon"></i>
+                                        <div class="tech-lines"></div>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="project-category font-code">3D WEBGL & VECTOR PHYSICS</span>
+                                        <h3 class="project-name">The Sandbox: 3D Driving Simulator</h3>
+                                        <div class="project-tags">
+                                            <span class="tag font-code">Three.js</span>
+                                            <span class="tag font-code">Vector Math</span>
+                                            <span class="tag font-code">Pacejka Slip</span>
+                                            <span class="tag font-code">Canvas 2D</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Back Side -->
+                                <div class="card-back">
+                                    <div class="project-info-back">
+                                        <div>
+                                            <span class="project-category font-code">3D Open-World Simulator</span>
+                                            <h3 class="project-name">The Sandbox Overview</h3>
+                                            <p class="project-desc">A physics-driven 3D driving simulator featuring dynamic suspension dynamics, pacejka drifting grip tires, reverse automatic drivetrain, HUD minimap, and checkpoint loop.</p>
+                                        </div>
+                                        <div class="project-actions-back">
+                                            <a href="https://github.com/SangameshAthani" target="_blank" rel="noopener noreferrer" class="btn-preview-link font-code">
+                                                <span>View Source</span>
+                                                <i data-lucide="github" class="btn-icon"></i>
+                                            </a>
+                                            <button type="button" class="project-cta-btn font-code" id="btn-project-sandbox">
+                                                <span>Launch Simulator</span>
+                                                <i data-lucide="play" class="arrow-icon"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -1590,12 +1638,135 @@ print(me.<span class="code-gap" id="codeGap">_______</span>())</code></pre>
         </div>
     </dialog>
 
-    <!-- Floating Anime AI Model -->
-    <div class="anime-model-container">
-        <div class="anime-model-wrapper">
-            <img src="anime_model.png" class="anime-model-image" alt="Anime Character Model">
+    <!-- Modal 5: The Sandbox 3D Driving Simulator -->
+    <dialog class="project-modal" id="modal-sandbox">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content-wrapper simulator-modal-wrapper">
+            <div class="modal-header">
+                <div class="modal-title-area">
+                    <span class="modal-tag font-code">SIMULATOR // WEBGL & 3D PHYSICS</span>
+                    <h2>The Sandbox: 3D Driving Simulator</h2>
+                </div>
+                <button class="modal-close" aria-label="Close Modal" data-close-modal="sandbox" id="btnCloseSandbox">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body simulator-modal-body">
+                <!-- Garage Vehicle Selection Screen -->
+                <div class="garage-overlay" id="garageOverlay">
+                    <div class="garage-card glassmorphic">
+                        <h3>SELECT VEHICLE PROTOTYPE</h3>
+                        <p class="garage-subtitle font-code">Choose an asset class to calibrate the physics engine</p>
+                        
+                        <div class="vehicle-options-grid">
+                            <!-- Race Car -->
+                            <div class="vehicle-option-card active" data-vehicle="race">
+                                <div class="option-icon"><i data-lucide="zap"></i></div>
+                                <h4>Race Car</h4>
+                                <span class="badge font-code">Speed Class</span>
+                                <div class="stat-group">
+                                    <div class="stat-row"><span>Mass:</span><span>1100 kg</span></div>
+                                    <div class="stat-row"><span>Suspension:</span><span>Stiff (45k N/m)</span></div>
+                                    <div class="stat-row"><span>Tire Grip:</span><span>Standard</span></div>
+                                </div>
+                            </div>
+                            <!-- SUV -->
+                            <div class="vehicle-option-card" data-vehicle="suv">
+                                <div class="option-icon"><i data-lucide="truck"></i></div>
+                                <h4>SUV Class</h4>
+                                <span class="badge font-code">Heavy Class</span>
+                                <div class="stat-group">
+                                    <div class="stat-row"><span>Mass:</span><span>2200 kg</span></div>
+                                    <div class="stat-row"><span>Suspension:</span><span>Soft (Damped)</span></div>
+                                    <div class="stat-row"><span>Tire Grip:</span><span>Stable</span></div>
+                                </div>
+                            </div>
+                            <!-- Jeep -->
+                            <div class="vehicle-option-card" data-vehicle="jeep">
+                                <div class="option-icon"><i data-lucide="compass"></i></div>
+                                <h4>Jeep Off-Road</h4>
+                                <span class="badge font-code">Climber Class</span>
+                                <div class="stat-group">
+                                    <div class="stat-row"><span>Mass:</span><span>1800 kg</span></div>
+                                    <div class="stat-row"><span>Suspension:</span><span>Max Travel (0.5m)</span></div>
+                                    <div class="stat-row"><span>Tire Grip:</span><span>High (1.2 μ)</span></div>
+                                </div>
+                            </div>
+                            <!-- Sedan -->
+                            <div class="vehicle-option-card" data-vehicle="sedan">
+                                <div class="option-icon"><i data-lucide="shield"></i></div>
+                                <h4>Luxury Sedan</h4>
+                                <span class="badge font-code">Stabilized Class</span>
+                                <div class="stat-group">
+                                    <div class="stat-row"><span>Mass:</span><span>1600 kg</span></div>
+                                    <div class="stat-row"><span>Suspension:</span><span>High Damped</span></div>
+                                    <div class="stat-row"><span>Tire Grip:</span><span>Smooth</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary" id="btnLaunchSandboxEngine">
+                            <span>INITIALIZE GAME ENGINE</span>
+                            <i data-lucide="play" class="btn-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Simulation Interface (active once initialized) -->
+                <div class="simulator-container" id="simulatorContainer" style="display: none;">
+                    <canvas id="sandboxCanvas"></canvas>
+                    
+                    <!-- HUD Telemetry Display -->
+                    <div class="simulator-hud glassmorphic font-code">
+                        <div class="hud-item speed-container">
+                            <span class="hud-label">VELOCITY</span>
+                            <span class="hud-value" id="hudSpeed">0</span>
+                            <span class="hud-unit">KM/H</span>
+                        </div>
+                        
+                        <div class="hud-item gear-container">
+                            <span class="hud-label">GEAR</span>
+                            <span class="hud-value text-cyan" id="hudGear">D</span>
+                        </div>
+
+                        <div class="hud-item rpm-container">
+                            <span class="hud-label">ENGINE_RPM</span>
+                            <div class="rpm-bar-track">
+                                <div class="rpm-bar-fill" id="hudRpmFill" style="width: 10%;"></div>
+                            </div>
+                            <span class="hud-value" id="hudRpm">1000</span>
+                        </div>
+
+                        <div class="hud-item checkpoint-container">
+                            <span class="hud-label">RACE_CHECKPOINT</span>
+                            <span class="hud-value" id="hudCheckpoints">0 / 5</span>
+                        </div>
+
+                        <div class="hud-item time-container">
+                            <span class="hud-label">SPLIT_TIME</span>
+                            <span class="hud-value text-purple" id="hudTimer">00:00.00</span>
+                        </div>
+
+                        <div class="hud-controls-help">
+                            <span>W/S/A/D to Drive • SPACE to Drift • R to Reset Vehicle</span>
+                        </div>
+                    </div>
+
+                    <!-- Real-Time Vector Mini-Map Canvas -->
+                    <div class="minimap-container glassmorphic">
+                        <canvas id="minimapCanvas" width="160" height="160"></canvas>
+                    </div>
+
+                    <!-- Checkpoint Split Notifications Toast -->
+                    <div class="split-toast" id="splitToast" style="display: none;">
+                        <span class="toast-title">CHECKPOINT CLEARED!</span>
+                        <span class="toast-time" id="splitToastTime">+14.22s</span>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </dialog>
 
     <!-- JS Scripts -->
     <script src="script.js"></script>
