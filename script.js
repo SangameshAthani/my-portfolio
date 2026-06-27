@@ -1441,9 +1441,7 @@ Global variables use 742 bytes (36%) of dynamic memory.
                 }, 50);
             });
         });
-    }
-
-    // ==========================================================================
+        // ==========================================================================
     // 11. "The Sandbox" 3D Open-World Driving Simulator
     // ==========================================================================
     const modalSandbox = document.getElementById("modal-sandbox");
@@ -1459,6 +1457,9 @@ Global variables use 742 bytes (36%) of dynamic memory.
     const hudRpmFill = document.getElementById("hudRpmFill");
     const hudCheckpointsVal = document.getElementById("hudCheckpoints");
     const hudTimerVal = document.getElementById("hudTimer");
+    const hudDamageVal = document.getElementById("hudDamage");
+    const hudDamageFill = document.getElementById("hudDamageFill");
+    const stormToggle = document.getElementById("stormToggle");
     const splitToast = document.getElementById("splitToast");
     const splitToastTime = document.getElementById("splitToastTime");
     
@@ -1524,13 +1525,13 @@ Global variables use 742 bytes (36%) of dynamic memory.
 
     // Engine Core Variables
     let scene, camera, renderer, animationFrameId;
-    let carChassis, wheels = [];
+    let carChassis, bodyMesh, wheels = [];
     let groundMesh, obstacles = [];
-    let keys = { w: false, a: false, s: false, d: false, space: false, r: false };
+    let keys = { w: false, a: false, s: false, d: false, space: false, r: false, m: false };
     let checkpoints = [];
     let nextCheckpointIndex = 0;
     
-    // Physics States
+    // Physics & Damage States
     let pos = new THREE.Vector3(0, 5, 0);
     let vel = new THREE.Vector3(0, 0, 0);
     let heading = 0; // Yaw
@@ -1545,13 +1546,50 @@ Global variables use 742 bytes (36%) of dynamic memory.
     let physicsConfig = {};
     let isInitialized = false;
 
+    // Damage arrays
+    let chassisOriginalVertices = [];
+    let cumulativeDamage = 0;
+    let steerPullSign = 1; // randomly pulls left (-1) or right (+1)
+
+    // Dynamic Weather States
+    let weatherState = {
+        isStorm: false,
+        rainSystem: null,
+        rainMaxParticles: 1200,
+        sunAngle: 0,
+        dayCycleSpeed: 0.00015
+    };
+    let ambientLight, sunLight;
+    
+    // Droplets overlay canvas
+    let dropletCanvas = null;
+    let dropletCtx = null;
+    let screenDroplets = [];
+
+    // Particle Emitters (Smoke & Dust)
+    let wheelParticleSystem = null;
+    const maxWheelParticles = 120;
+    let wheelParticleGeo, wheelParticleMat;
+    let wheelParticles = [];
+
+    // Fluid Wake Ripples
+    let wakeRings = [];
+    const maxWakeRings = 15;
+    let waterPlane = null;
+
+    // Web Audio Synthesizer variables
+    let audioCtx = null;
+    let engineOsc1 = null, engineOsc2 = null;
+    let engineFilter = null, engineGain = null;
+    let screechOsc = null, screechGain = null;
+
     // Mini-map canvases
     const minimapCanvas = document.getElementById("minimapCanvas");
     const minimapCtx = minimapCanvas ? minimapCanvas.getContext("2d") : null;
 
     // Instanced Particles for Splashes
     let particleSystem = null;
-    const maxParticles = 50;
+    const maxParticles = 60;
     let particleGeometry, particleMaterial;
     let activeParticles = [];
 
@@ -1576,12 +1614,12 @@ Global variables use 742 bytes (36%) of dynamic memory.
 
     // Hooke's Law Suspension Compression Math
     let lastSuspensionCompression = [0, 0, 0, 0]; // FL, FR, RL, RR
+    let lastCompVel = [0, 0, 0, 0];
 
     function updateSuspensionForces(dt) {
         if (!isAirborne) {
             let config = physicsConfig;
             let currentCompression = [];
-            let avgSuspensionForce = 0;
             
             // FL, FR, RL, RR wheel offsets relative to chassis center
             const wheelOffsets = [
@@ -1590,6 +1628,8 @@ Global variables use 742 bytes (36%) of dynamic memory.
                 new THREE.Vector3(1.2, -config.clearance, -1.8), // Rear Left
                 new THREE.Vector3(-1.2, -config.clearance, -1.8) // Rear Right
             ];
+
+            let creakTriggered = false;
 
             for (let i = 0; i < 4; i++) {
                 // Calculate world positions of attachment points
@@ -1607,12 +1647,17 @@ Global variables use 742 bytes (36%) of dynamic memory.
                     
                     // Hooke's Law: F = -k * x - c * v
                     let fSusp = (config.suspensionK * compression) + (config.suspensionC * compVel);
-                    avgSuspensionForce += fSusp;
                     currentCompression.push(compression);
+                    
+                    // Trigger landing suspension creak if compression velocity is extremely high
+                    if (compVel > 3.8 && !creakTriggered) {
+                        playSuspensionCreak();
+                        creakTriggered = true;
+                    }
                     
                     // Animate Wheel Mesh visually
                     if (wheels[i]) {
-                        wheels[i].position.y = wheelOffsets[i].y + (compression * 0.8);
+                        wheels[i].position.y = wheelOffsets[i].y + (compression * 0.85);
                     }
                 } else {
                     currentCompression.push(0);
@@ -1625,12 +1670,139 @@ Global variables use 742 bytes (36%) of dynamic memory.
         }
     }
 
+    // Initialize Web Audio Synth API
+    function startAudioSystem() {
+        if (audioCtx) return;
+        
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // 1. Sawtooth Oscillator for engine base hum
+            engineOsc1 = audioCtx.createOscillator();
+            engineOsc1.type = 'sawtooth';
+            engineOsc1.frequency.setValueAtTime(45, audioCtx.currentTime);
+            
+            // 2. Triangle Oscillator for engine harmonics (chorus depth)
+            engineOsc2 = audioCtx.createOscillator();
+            engineOsc2.type = 'triangle';
+            engineOsc2.frequency.setValueAtTime(67.5, audioCtx.currentTime);
+            engineOsc2.detune.setValueAtTime(10, audioCtx.currentTime);
+
+            // Lowpass filter to muffle structural engine blocks
+            engineFilter = audioCtx.createBiquadFilter();
+            engineFilter.type = 'lowpass';
+            engineFilter.frequency.setValueAtTime(280, audioCtx.currentTime);
+            
+            // Engine Gain
+            engineGain = audioCtx.createGain();
+            engineGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+
+            // Connections
+            engineOsc1.connect(engineFilter);
+            engineOsc2.connect(engineFilter);
+            engineFilter.connect(engineGain);
+            engineGain.connect(audioCtx.destination);
+            
+            engineOsc1.start(0);
+            engineOsc2.start(0);
+
+            // 3. Screech Oscillator for sliding tyres
+            screechOsc = audioCtx.createOscillator();
+            screechOsc.type = 'triangle';
+            screechOsc.frequency.setValueAtTime(950, audioCtx.currentTime);
+            
+            screechGain = audioCtx.createGain();
+            screechGain.gain.setValueAtTime(0.0, audioCtx.currentTime);
+            
+            screechOsc.connect(screechGain);
+            screechGain.connect(audioCtx.destination);
+            screechOsc.start(0);
+        } catch (e) {
+            console.warn("Web Audio API not supported or blocked: ", e);
+        }
+    }
+
+    function updateAudio(dt) {
+        if (!audioCtx) return;
+
+        // Engine Pitch shift mapped to RPM
+        let pitchFreq = 30 + (rpm / 7000) * 170;
+        engineOsc1.frequency.setTargetAtTime(pitchFreq, audioCtx.currentTime, 0.05);
+        engineOsc2.frequency.setTargetAtTime(pitchFreq * 1.5, audioCtx.currentTime, 0.05);
+
+        // Engine volume mapping throttle inputs
+        let engineVol = 0.05 + (keys.w ? 0.08 : 0.0) + (Math.abs(rpm) / 7000) * 0.07;
+        engineGain.gain.setTargetAtTime(engineVol, audioCtx.currentTime, 0.05);
+
+        // Tire screech synthesizer volume mapping drifts
+        let isDrifting = keys.space && vel.length() > 3.5;
+        let lateralVelocity = vel.dot(new THREE.Vector3(Math.cos(heading), 0, -Math.sin(heading)));
+        let isSlipping = Math.abs(lateralVelocity) > 6.0;
+        
+        let targetScreechVol = (isDrifting || isSlipping) ? 0.07 : 0.0;
+        screechGain.gain.setTargetAtTime(targetScreechVol, audioCtx.currentTime, 0.04);
+        
+        // Modulate screech pitch slightly for sliding realism
+        let screechPitch = 920 + Math.sin(Date.now() * 0.02) * 50 + (vel.length() * 2);
+        screechOsc.frequency.setValueAtTime(screechPitch, audioCtx.currentTime);
+    }
+
+    function playCollisionSound() {
+        if (!audioCtx) return;
+        try {
+            let bufferSize = audioCtx.sampleRate * 0.35; // 0.35s sound
+            let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            let data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1; // white noise
+            }
+            let noiseNode = audioCtx.createBufferSource();
+            noiseNode.buffer = buffer;
+            
+            let filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(160, audioCtx.currentTime);
+            filter.Q.setValueAtTime(1.8, audioCtx.currentTime);
+            
+            let gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.26, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+
+            noiseNode.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            noiseNode.start(0);
+        } catch (e) {}
+    }
+
+    function playSuspensionCreak() {
+        if (!audioCtx) return;
+        try {
+            let osc = audioCtx.createOscillator();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(45, audioCtx.currentTime + 0.18);
+            
+            let gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(0);
+            osc.stop(audioCtx.currentTime + 0.2);
+        } catch (e) {}
+    }
+
     // Initialize WebGL Scene
     function initSandboxEngine() {
         if (isInitialized) return;
         
         physicsConfig = vehicleSpecs[selectedVehicleType];
         
+        // Start Sound context
+        startAudioSystem();
+
         // 1. Scene & Renderer setup
         scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x020408, 0.007);
@@ -1641,6 +1813,9 @@ Global variables use 742 bytes (36%) of dynamic memory.
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        // Create overlay canvas for screen rain droplets
+        createDropletOverlayCanvas();
 
         // 2. Camera Setup
         camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
@@ -1653,14 +1828,27 @@ Global variables use 742 bytes (36%) of dynamic memory.
         roll = 0;
         yawVel = 0;
         gear = "D";
+        cumulativeDamage = 0;
+        steerPullSign = Math.random() > 0.5 ? 1 : -1;
         nextCheckpointIndex = 0;
         raceStartTime = Date.now();
+        weatherState.sunAngle = 0.5; // start mid-day
+
+        if (hudDamageVal) hudDamageVal.textContent = "0%";
+        if (hudDamageFill) hudDamageFill.style.width = "0%";
+
+        // Bind storm toggle listener
+        if (stormToggle) {
+            stormToggle.checked = false;
+            weatherState.isStorm = false;
+            stormToggle.addEventListener("change", handleStormToggle);
+        }
 
         // 3. Ambient & Directional Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.35);
+        ambientLight = new THREE.AmbientLight(0xffffff, 0.35);
         scene.add(ambientLight);
 
-        const sunLight = new THREE.DirectionalLight(0xffffff, 1.25);
+        sunLight = new THREE.DirectionalLight(0xffffff, 1.25);
         sunLight.position.set(50, 100, 50);
         sunLight.castShadow = true;
         sunLight.shadow.mapSize.width = 1024;
@@ -1710,6 +1898,20 @@ Global variables use 742 bytes (36%) of dynamic memory.
         const groundWire = new THREE.Mesh(groundGeo, wireframeMat);
         scene.add(groundWire);
 
+        // Water plane body in valleys
+        const waterGeo = new THREE.PlaneGeometry(160, 160);
+        waterGeo.rotateX(-Math.PI / 2);
+        const waterMat = new THREE.MeshStandardMaterial({
+            color: 0x03182b,
+            roughness: 0.08,
+            metalness: 0.95,
+            transparent: true,
+            opacity: 0.80
+        });
+        waterPlane = new THREE.Mesh(waterGeo, waterMat);
+        waterPlane.position.set(0, -2.1, 0); // procedurally sits at -2.1 elevation
+        scene.add(waterPlane);
+
         // 5. Build Ramps, Obstacles, and Boundary fences
         buildOpenWorldAssets();
 
@@ -1719,8 +1921,12 @@ Global variables use 742 bytes (36%) of dynamic memory.
         // 7. Setup Checkpoints
         buildRaceCheckpoints();
 
-        // 8. Particle System Setup
+        // 8. Particle Systems
         buildParticles();
+        buildWheelParticles();
+
+        // Wake ripple pool initialization
+        wakeRings = [];
 
         // Event listeners
         window.addEventListener("keydown", handleKeyDown);
@@ -1728,6 +1934,75 @@ Global variables use 742 bytes (36%) of dynamic memory.
         
         isInitialized = true;
         animateSimulator();
+    }
+
+    function createDropletOverlayCanvas() {
+        const canvas = document.getElementById("sandboxCanvas");
+        if (!canvas) return;
+        
+        dropletCanvas = document.createElement("canvas");
+        dropletCanvas.id = "dropletCanvas";
+        dropletCanvas.style.position = "absolute";
+        dropletCanvas.style.top = "0";
+        dropletCanvas.style.left = "0";
+        dropletCanvas.style.width = "100%";
+        dropletCanvas.style.height = "100%";
+        dropletCanvas.style.pointerEvents = "none";
+        dropletCanvas.style.zIndex = "5";
+        
+        canvas.parentNode.appendChild(dropletCanvas);
+        
+        dropletCanvas.width = canvas.clientWidth;
+        dropletCanvas.height = canvas.clientHeight;
+        dropletCtx = dropletCanvas.getContext("2d");
+        
+        screenDroplets = [];
+    }
+
+    function handleStormToggle() {
+        weatherState.isStorm = stormToggle.checked;
+        if (weatherState.isStorm) {
+            buildRainSystem();
+        } else {
+            removeRainSystem();
+        }
+    }
+
+    function buildRainSystem() {
+        if (weatherState.rainSystem) return;
+        
+        const count = weatherState.rainMaxParticles;
+        const rainGeo = new THREE.BufferGeometry();
+        const positions = new Float32Array(count * 3);
+        
+        // Distribute rain in a box centered at the camera
+        for (let i = 0; i < count; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 80;
+            positions[i * 3 + 1] = Math.random() * 40;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 80;
+        }
+
+        rainGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        
+        // Linear vertical particle styling
+        const rainMat = new THREE.PointsMaterial({
+            color: 0x7dd3fc,
+            size: 0.15,
+            transparent: true,
+            opacity: 0.45
+        });
+
+        weatherState.rainSystem = new THREE.Points(rainGeo, rainMat);
+        scene.add(weatherState.rainSystem);
+    }
+
+    function removeRainSystem() {
+        if (weatherState.rainSystem) {
+            scene.remove(weatherState.rainSystem);
+            weatherState.rainSystem.geometry.dispose();
+            weatherState.rainSystem.material.dispose();
+            weatherState.rainSystem = null;
+        }
     }
 
     function buildOpenWorldAssets() {
@@ -1796,17 +2071,30 @@ Global variables use 742 bytes (36%) of dynamic memory.
 
         let color = physicsConfig.color;
 
-        // Chassis body
-        const bodyGeo = new THREE.BoxGeometry(2.4, 0.8, 4.2);
+        // Chassis body - converted to nonIndexed for structural damage dent vertex displacement
+        let bodyGeo = new THREE.BoxGeometry(2.4, 0.8, 4.2);
+        bodyGeo = bodyGeo.toNonIndexed(); // allows separate triangle vertex manipulations
+        
         const bodyMat = new THREE.MeshStandardMaterial({
             color: color,
             roughness: 0.15,
             metalness: 0.8
         });
-        const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
+        bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
         bodyMesh.castShadow = true;
         bodyMesh.receiveShadow = true;
         carChassis.add(bodyMesh);
+
+        // Store original vertices clone
+        chassisOriginalVertices = [];
+        const posAttr = bodyMesh.geometry.attributes.position;
+        for (let i = 0; i < posAttr.count; i++) {
+            chassisOriginalVertices.push(new THREE.Vector3(
+                posAttr.getX(i),
+                posAttr.getY(i),
+                posAttr.getZ(i)
+            ));
+        }
 
         // Cabin cockpit (glass)
         const cabGeo = new THREE.BoxGeometry(1.8, 0.6, 2.2);
@@ -1923,6 +2211,34 @@ Global variables use 742 bytes (36%) of dynamic memory.
         activeParticles = [];
     }
 
+    function buildWheelParticles() {
+        wheelParticleGeo = new THREE.BufferGeometry();
+        let positions = new Float32Array(maxWheelParticles * 3);
+        let colors = new Float32Array(maxWheelParticles * 3);
+        
+        // Hide out of bounds initially
+        for (let i = 0; i < maxWheelParticles; i++) {
+            positions[i*3] = 9999;
+            positions[i*3+1] = 9999;
+            positions[i*3+2] = 9999;
+        }
+
+        wheelParticleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        wheelParticleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        
+        wheelParticleMat = new THREE.PointsMaterial({
+            size: 0.6,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.NormalBlending
+        });
+
+        wheelParticleSystem = new THREE.Points(wheelParticleGeo, wheelParticleMat);
+        scene.add(wheelParticleSystem);
+        wheelParticles = [];
+    }
+
     function triggerParticleSplash(origin) {
         activeParticles = [];
         const positions = particleGeometry.attributes.position.array;
@@ -1948,6 +2264,129 @@ Global variables use 742 bytes (36%) of dynamic memory.
             });
         }
         particleGeometry.attributes.position.needsUpdate = true;
+    }
+
+    function emitWheelParticles(posL, posR, isOffRoad, speed) {
+        const positions = wheelParticleGeo.attributes.position.array;
+        const colors = wheelParticleGeo.attributes.color.array;
+        
+        // Spawn 2 particles from wheels
+        for (let wheelIndex = 0; wheelIndex < 2; wheelIndex++) {
+            let spawnPos = wheelIndex === 0 ? posL : posR;
+            
+            // Find slot
+            let slot = -1;
+            for (let i = 0; i < maxWheelParticles; i++) {
+                if (!wheelParticles[i] || wheelParticles[i].life <= 0) {
+                    slot = i;
+                    break;
+                }
+            }
+            if (slot === -1) continue;
+
+            positions[slot * 3] = spawnPos.x;
+            positions[slot * 3 + 1] = spawnPos.y - 0.2;
+            positions[slot * 3 + 2] = spawnPos.z;
+
+            // Colors: Gray for drift smoke, Brown for terrain dust
+            if (isOffRoad) {
+                colors[slot * 3] = 0.45;     // R
+                colors[slot * 3 + 1] = 0.35; // G
+                colors[slot * 3 + 2] = 0.25; // B
+            } else {
+                colors[slot * 3] = 0.65;     // R
+                colors[slot * 3 + 1] = 0.65; // G
+                colors[slot * 3 + 2] = 0.65; // B
+            }
+
+            wheelParticles[slot] = {
+                index: slot,
+                velX: -Math.sin(heading) * speed * 0.4 + (Math.random() - 0.5) * 2,
+                velY: Math.random() * 2 + 1,
+                velZ: -Math.cos(heading) * speed * 0.4 + (Math.random() - 0.5) * 2,
+                life: 1.0,
+                isOffRoad: isOffRoad
+            };
+        }
+        wheelParticleGeo.attributes.position.needsUpdate = true;
+        wheelParticleGeo.attributes.color.needsUpdate = true;
+    }
+
+    function updateWheelParticles(dt) {
+        const positions = wheelParticleGeo.attributes.position.array;
+        
+        for (let i = 0; i < maxWheelParticles; i++) {
+            let wp = wheelParticles[i];
+            if (wp && wp.life > 0) {
+                positions[wp.index * 3] += wp.velX * dt;
+                positions[wp.index * 3 + 1] += wp.velY * dt;
+                positions[wp.index * 3 + 2] += wp.velZ * dt;
+                
+                // Add wind drift
+                wp.velX += 0.5 * dt;
+                wp.velZ += 0.5 * dt;
+                wp.life -= dt * (wp.isOffRoad ? 1.6 : 1.2); // dust decays faster
+                
+                if (wp.life <= 0) {
+                    positions[wp.index * 3] = 9999;
+                    positions[wp.index * 3 + 1] = 9999;
+                    positions[wp.index * 3 + 2] = 9999;
+                }
+            }
+        }
+        wheelParticleGeo.attributes.position.needsUpdate = true;
+    }
+
+    function spawnWaterRipple(wPos) {
+        // Recycle flat ring geometry meshes
+        let rippleMesh = null;
+        
+        // Try finding inactive ring
+        for (let i = 0; i < wakeRings.length; i++) {
+            if (wakeRings[i].opacity <= 0) {
+                rippleMesh = wakeRings[i];
+                break;
+            }
+        }
+
+        if (!rippleMesh) {
+            if (wakeRings.length >= maxWakeRings) return;
+            
+            // Create a flat ring geometry flat on Y
+            const ringGeo = new THREE.RingGeometry(0.8, 1.0, 16);
+            ringGeo.rotateX(-Math.PI / 2);
+            
+            const ringMat = new THREE.MeshBasicMaterial({
+                color: 0x93c5fd,
+                transparent: true,
+                opacity: 0.5,
+                side: THREE.DoubleSide
+            });
+            
+            rippleMesh = new THREE.Mesh(ringGeo, ringMat);
+            scene.add(rippleMesh);
+            wakeRings.push(rippleMesh);
+        }
+
+        rippleMesh.position.set(wPos.x, -2.08, wPos.z); // sit just above water plane
+        rippleMesh.scale.set(1.0, 1.0, 1.0);
+        rippleMesh.material.opacity = 0.45;
+        rippleMesh.opacity = 0.45; // custom prop
+    }
+
+    function updateWaterRipples(dt) {
+        wakeRings.forEach(ring => {
+            if (ring.opacity > 0) {
+                ring.scale.x += dt * 3.5;
+                ring.scale.z += dt * 3.5;
+                ring.opacity -= dt * 0.7;
+                ring.material.opacity = Math.max(0, ring.opacity);
+                
+                if (ring.opacity <= 0) {
+                    ring.position.set(9999, 9999, 9999);
+                }
+            }
+        });
     }
 
     function updateParticles(dt) {
@@ -1985,7 +2424,8 @@ Global variables use 742 bytes (36%) of dynamic memory.
             KeyA: 'a', ArrowLeft: 'a',
             KeyD: 'd', ArrowRight: 'd',
             Space: 'space',
-            KeyR: 'r'
+            KeyR: 'r',
+            KeyM: 'm'
         };
         const action = keyMap[e.code];
         if (action) {
@@ -2001,7 +2441,8 @@ Global variables use 742 bytes (36%) of dynamic memory.
             KeyA: 'a', ArrowLeft: 'a',
             KeyD: 'd', ArrowRight: 'd',
             Space: 'space',
-            KeyR: 'r'
+            KeyR: 'r',
+            KeyM: 'm'
         };
         const action = keyMap[e.code];
         if (action) {
@@ -2022,17 +2463,163 @@ Global variables use 742 bytes (36%) of dynamic memory.
 
         if (dt <= 0 || dt > 0.1) dt = 0.016; // clamp framing errors
 
+        updateAtmosphere(time);
         updateVehiclePhysics(dt);
         updateCheckpointsDetection();
         updateParticles(dt);
+        updateWheelParticles(dt);
+        updateWaterRipples(dt);
+        updateRainParticles(dt);
+        updateAudio(dt);
         render3DScene();
         drawMinimap();
+        drawScreenDroplets(dt);
+    }
+
+    function updateAtmosphere(time) {
+        // Slow rotation of sun angle
+        weatherState.sunAngle = (time * weatherState.dayCycleSpeed) % (Math.PI * 2);
+        
+        let sunCos = Math.cos(weatherState.sunAngle);
+        let sunSin = Math.sin(weatherState.sunAngle);
+
+        // Update directional light coordinates
+        sunLight.position.set(sunSin * 90, sunCos * 90 + 20, sunCos * 30);
+
+        // Compute day cycle values (noon = 1.0, night = 0.0)
+        let dayPct = Math.max(0, sunCos);
+        sunLight.intensity = dayPct * 1.35;
+        
+        // Transition fog and ambient hues
+        let ambientVal = 0.06 + dayPct * 0.34;
+        ambientLight.color.setHSL(0.55, 0.35, ambientVal);
+        
+        let dayFogColor = new THREE.Color(weatherState.isStorm ? 0x07090f : 0x0a0d1a);
+        let nightFogColor = new THREE.Color(0x010204);
+        let currentFogColor = nightFogColor.clone().lerp(dayFogColor, dayPct);
+        
+        scene.fog.color.copy(currentFogColor);
+        renderer.setClearColor(currentFogColor);
+    }
+
+    function updateRainParticles(dt) {
+        if (!weatherState.rainSystem) return;
+
+        const positions = weatherState.rainSystem.geometry.attributes.position.array;
+        const count = weatherState.rainMaxParticles;
+
+        for (let i = 0; i < count; i++) {
+            positions[i * 3 + 1] -= dt * 26.0; // fall down fast
+            
+            // wrap boundary relative to car coordinates
+            let px = positions[i * 3] + camera.position.x;
+            let pz = positions[i * 3 + 2] + camera.position.z;
+            let py = positions[i * 3 + 1];
+            let gH = getTerrainHeight(px, pz);
+
+            if (py < gH) {
+                // reset particle
+                positions[i * 3] = (Math.random() - 0.5) * 80;
+                positions[i * 3 + 1] = camera.position.y + 25 + Math.random() * 15;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 80;
+            }
+        }
+        weatherState.rainSystem.geometry.attributes.position.needsUpdate = true;
+        
+        // Center rain cloud coordinates over camera
+        weatherState.rainSystem.position.set(camera.position.x, 0, camera.position.z);
+    }
+
+    function checkCollisionImpulses() {
+        if (vel.length() * 3.6 < 14) return; // ignore minor bumps
+        
+        // Chassis bounding center
+        let chassisBox = new THREE.Box3().setFromObject(bodyMesh);
+        let collideObstacle = null;
+        let collideDist = 9999;
+
+        // Verify distance against obstacles
+        obstacles.forEach(obs => {
+            // Check approximate distance
+            let dist = pos.distanceTo(obs.position);
+            if (dist < 8.0 && dist < collideDist) {
+                collideDist = dist;
+                collideObstacle = obs;
+            }
+        });
+
+        if (collideObstacle && collideDist < 4.8) {
+            let impactVec = vel.clone().normalize().negate();
+            let impulse = vel.length() * 0.06;
+            
+            // Trigger metallic crunch synth noise
+            playCollisionSound();
+
+            // Accumulate Structural Damage
+            cumulativeDamage = Math.min(100, cumulativeDamage + impulse * 9);
+            
+            // HUD updates
+            if (hudDamageVal) hudDamageVal.textContent = `${Math.round(cumulativeDamage)}%`;
+            if (hudDamageFill) hudDamageFill.style.width = `${Math.round(cumulativeDamage)}%`;
+
+            // Displace chassis geometry vertices (soft-body denting)
+            let localImpact = bodyMesh.worldToLocal(collideObstacle.position.clone());
+            let posAttr = bodyMesh.geometry.attributes.position;
+            
+            for (let i = 0; i < posAttr.count; i++) {
+                let vx = posAttr.getX(i);
+                let vy = posAttr.getY(i);
+                let vz = posAttr.getZ(i);
+                let dist = localImpact.distanceTo(new THREE.Vector3(vx, vy, vz));
+
+                if (dist < 2.0) {
+                    // Push vertex inward toward local center (0,0,0)
+                    let pushDir = new THREE.Vector3(0, 0, 0).sub(localImpact).normalize();
+                    let dentAmt = (2.0 - dist) * impulse * 0.40;
+                    
+                    posAttr.setXYZ(
+                        i,
+                        vx + pushDir.x * dentAmt,
+                        vy + pushDir.y * dentAmt,
+                        vz + pushDir.z * dentAmt
+                    );
+                }
+            }
+            posAttr.needsUpdate = true;
+            bodyMesh.geometry.computeVertexNormals();
+
+            // Reverse velocity bounce impulse
+            vel.multiplyScalar(-0.35); 
+        }
+    }
+
+    function resetDamage() {
+        if (!isInitialized || !bodyMesh) return;
+        
+        let posAttr = bodyMesh.geometry.attributes.position;
+        for (let i = 0; i < posAttr.count; i++) {
+            let orig = chassisOriginalVertices[i];
+            posAttr.setXYZ(i, orig.x, orig.y, orig.z);
+        }
+        posAttr.needsUpdate = true;
+        bodyMesh.geometry.computeVertexNormals();
+
+        cumulativeDamage = 0;
+        
+        if (hudDamageVal) hudDamageVal.textContent = "0%";
+        if (hudDamageFill) hudDamageFill.style.width = "0%";
     }
 
     function updateVehiclePhysics(dt) {
         const config = physicsConfig;
         
-        // 1. Reset check
+        // 1. Repair check
+        if (keys.m) {
+            resetDamage();
+            keys.m = false;
+        }
+
+        // Reset check
         if (keys.r) {
             pos.set(0, getTerrainHeight(0, 0) + 2, 0);
             vel.set(0, 0, 0);
@@ -2075,17 +2662,20 @@ Global variables use 742 bytes (36%) of dynamic memory.
 
         if (gear === "D") {
             engineForce = throttleInput * config.maxEngineForce;
-            brakingForce = brakeInput * config.maxEngineForce * 1.5; // Stiffer brakes
+            brakingForce = brakeInput * config.maxEngineForce * 1.5;
         } else {
             // S key acts as reverse throttle, W key acts as reverse brake
             engineForce = -brakeInput * config.maxEngineForce * 0.5; // slower reverse speed
             brakingForce = throttleInput * config.maxEngineForce * 1.5;
         }
 
+        // Dynamic steering Pull based on structural damage
+        let damageSteeringPull = (cumulativeDamage / 100) * 0.12 * steerPullSign;
+
         // 4. Update steering and tire slip
-        let targetSteering = steerInput * 0.55 * config.steeringRatio; // ~32 deg max steer
+        let targetSteering = steerInput * 0.55 * config.steeringRatio + damageSteeringPull;
         let currentSteer = wheels[0] ? wheels[0].rotation.y : 0;
-        let steerLerp = currentSteer + (targetSteering - currentSteer) * dt * 10;
+        let steerLerp = currentSteer + (targetSteering - currentSteer) * dt * 9;
         
         // Rotate front wheels visually for steering
         if (wheels[0]) wheels[0].rotation.y = steerLerp;
@@ -2093,16 +2683,18 @@ Global variables use 742 bytes (36%) of dynamic memory.
 
         // 5. Custom Pacejka Slip & Drift model
         let isDrifting = keys.space && Math.abs(fwdSpeed) > 10;
-        let slipFriction = config.friction;
+        
+        // Lower friction coefficient (μ) by 40% when rain is active (hydroplaning)
+        let rainFrictionFactor = weatherState.isStorm ? 0.60 : 1.0;
+        let slipFriction = config.friction * rainFrictionFactor;
         
         if (isDrifting) {
-            slipFriction *= 0.35; // lateral stiffness drops to 35% of base
-            // Animate drift trail indicators / rear wheel spin angles
-            yawVel += steerInput * dt * 2.8; 
+            slipFriction *= 0.30; // drop lateral friction
+            yawVel += steerInput * dt * 2.85; 
         } else {
             // Normal stabilizing friction
             yawVel += steerInput * (fwdSpeed / 30) * dt * 1.8;
-            yawVel *= 0.92; // yaw damping
+            yawVel *= 0.90; // yaw damping
         }
 
         // Apply heading update
@@ -2145,12 +2737,10 @@ Global variables use 742 bytes (36%) of dynamic memory.
             // Apply gravity
             newYVel -= 9.81 * dt;
             
-            // Aerodynamic Pitch torque: throttle rotates car pitch back, brake rotates forward
+            // Aerodynamic Pitch torque: W/S inputs pitch nose forward/back
             let pitchTorque = (throttleInput - brakeInput) * dt * 1.2;
             pitch += pitchTorque;
-            
-            // Damping rotation
-            pitch *= 0.98;
+            pitch *= 0.97; // damping rotation
         } else {
             // Snap to ground clearance
             pos.y = groundH + config.clearance;
@@ -2186,6 +2776,36 @@ Global variables use 742 bytes (36%) of dynamic memory.
             vel.z = 0;
         }
 
+        // Check for collision damages
+        checkCollisionImpulses();
+
+        // 10. Process tyre particle emitters
+        let isOffRoad = pos.y > -2.0 && getTerrainHeight(pos.x, pos.z) > -1.8; // simple offroad test
+        let speedMag = vel.length();
+
+        // Generate drift smoke or terrain dust
+        if (speedMag > 3.0 && !isAirborne) {
+            // Rear wheels attachment positions
+            let offsetL = new THREE.Vector3(1.25, -config.clearance, -1.8).applyAxisAngle(new THREE.Vector3(0, 1, 0), heading).add(pos);
+            let offsetR = new THREE.Vector3(-1.25, -config.clearance, -1.8).applyAxisAngle(new THREE.Vector3(0, 1, 0), heading).add(pos);
+
+            if (isDrifting || (keys.w && speedMag < 8)) {
+                // Emit asphalt gray smoke
+                emitWheelParticles(offsetL, offsetR, false, speedMag);
+            } else if (isOffRoad && speedMag > 8) {
+                // Emit brown dirt dust
+                emitWheelParticles(offsetL, offsetR, true, speedMag);
+            }
+        }
+
+        // 11. Water zones fluid wake ripples
+        if (pos.y < -1.8 && speedMag > 2.0) {
+            let offsetRear = new THREE.Vector3(0, -config.clearance, -1.8).applyAxisAngle(new THREE.Vector3(0, 1, 0), heading).add(pos);
+            if (Math.random() < 0.22) {
+                spawnWaterRipple(offsetRear);
+            }
+        }
+
         // Apply transforms to 3D meshes
         carChassis.position.copy(pos);
         carChassis.rotation.set(0, heading, 0);
@@ -2198,7 +2818,7 @@ Global variables use 742 bytes (36%) of dynamic memory.
             w.children[0].rotateY(wheelRotateSpeed);
         });
 
-        // 10. Update Speedometer, RPM, and Gear HUDs
+        // 12. Update Telemetry HUD displays
         updateTelemetryHUD(newFwdSpeed);
     }
 
@@ -2260,7 +2880,7 @@ Global variables use 742 bytes (36%) of dynamic memory.
         let activeRing = checkpoints[nextCheckpointIndex];
         let distance = pos.distanceTo(activeRing.position);
 
-        // Collision threshold (5.5m sphere overlapping ring center)
+        // Collision threshold (7.5m sphere overlapping ring center)
         if (distance < 7.5) {
             // Trigger splash explosion
             triggerParticleSplash(activeRing.position);
@@ -2393,6 +3013,62 @@ Global variables use 742 bytes (36%) of dynamic memory.
         ctx.restore();
     }
 
+    function spawnScreenDroplet() {
+        if (!dropletCanvas || screenDroplets.length >= 22) return;
+        screenDroplets.push({
+            x: Math.random() * dropletCanvas.width,
+            y: Math.random() * -10,
+            vy: Math.random() * 2.8 + 1.2,
+            size: Math.random() * 2.5 + 1.5,
+            life: 1.0
+        });
+    }
+
+    function drawScreenDroplets(dt) {
+        if (!dropletCtx || !dropletCanvas) return;
+        
+        const ctx = dropletCtx;
+        ctx.clearRect(0, 0, dropletCanvas.width, dropletCanvas.height);
+        
+        if (weatherState.isStorm) {
+            // Spawn droplets occasionally
+            if (Math.random() < 0.15) {
+                spawnScreenDroplet();
+            }
+
+            screenDroplets.forEach((d, index) => {
+                d.y += d.vy * dt * 60;
+                
+                // Draw drop path vector
+                ctx.beginPath();
+                ctx.arc(d.x, d.y, d.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(147, 197, 253, 0.12)';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // Draw simple refraction glare spot
+                ctx.beginPath();
+                ctx.arc(d.x - d.size * 0.28, d.y - d.size * 0.28, d.size * 0.25, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.fill();
+
+                if (d.y > dropletCanvas.height) {
+                    screenDroplets.splice(index, 1);
+                }
+            });
+        } else {
+            // Slow dry out of screen droplets
+            if (screenDroplets.length > 0) {
+                screenDroplets.forEach((d, index) => {
+                    d.size -= dt * 0.5;
+                    if (d.size <= 0) screenDroplets.splice(index, 1);
+                });
+            }
+        }
+    }
+
     function render3DScene() {
         if (!renderer || !scene || !camera) return;
 
@@ -2409,14 +3085,36 @@ Global variables use 742 bytes (36%) of dynamic memory.
         let terrainCamH = getTerrainHeight(camTargetX, camTargetZ) + 1.5;
         camTargetY = Math.max(camTargetY, terrainCamH);
 
-        // Smooth camera lerp
+        // Dynamic Camera Shake (linked to speed and ground roughness)
+        let shakeFreq = 0;
+        let shakeAmp = 0;
+        
+        if (!isAirborne) {
+            let speedKmh = vel.length() * 3.6;
+            shakeAmp = (speedKmh / 240) * (0.012 + Math.abs(pitch) * 0.04);
+            shakeFreq = Date.now() * 0.055;
+        }
+
+        // Smooth camera position follow lerp
         camera.position.x += (camTargetX - camera.position.x) * 0.12;
         camera.position.y += (camTargetY - camera.position.y) * 0.12;
         camera.position.z += (camTargetZ - camera.position.z) * 0.12;
 
+        // Add camera shaking vibration offset
+        if (shakeAmp > 0) {
+            camera.position.x += Math.sin(shakeFreq) * shakeAmp;
+            camera.position.y += Math.cos(shakeFreq * 1.2) * shakeAmp;
+        }
+
         // Camera looks slightly ahead of car
         let lookTarget = pos.clone().add(new THREE.Vector3(Math.sin(heading) * 3, 0, Math.cos(heading) * 3));
         camera.lookAt(lookTarget);
+
+        // Cinematic Field of View (FOV) dynamic stretching
+        let isDrifting = keys.space && vel.length() > 3.5;
+        let targetFov = 60 + (vel.length() / 45) * 22 + (isDrifting ? 8 : 0);
+        camera.fov += (targetFov - camera.fov) * 0.08;
+        camera.updateProjectionMatrix();
 
         renderer.render(scene, camera);
     }
@@ -2427,6 +3125,29 @@ Global variables use 742 bytes (36%) of dynamic memory.
         
         window.removeEventListener("keydown", handleKeyDown);
         window.removeEventListener("keyup", handleKeyUp);
+
+        if (stormToggle) {
+            stormToggle.removeEventListener("change", handleStormToggle);
+        }
+
+        if (dropletCanvas) {
+            dropletCanvas.parentNode.removeChild(dropletCanvas);
+            dropletCanvas = null;
+            dropletCtx = null;
+        }
+
+        // Dispose sound synthesizer
+        if (audioCtx) {
+            try {
+                if (engineOsc1) engineOsc1.stop();
+                if (engineOsc2) engineOsc2.stop();
+                if (screechOsc) screechOsc.stop();
+                audioCtx.close();
+            } catch (e) {}
+            audioCtx = null;
+            engineOsc1 = null; engineOsc2 = null;
+            screechOsc = null;
+        }
 
         if (renderer) {
             renderer.dispose();
@@ -2452,6 +3173,7 @@ Global variables use 742 bytes (36%) of dynamic memory.
         wheels = [];
         checkpoints = [];
         checkpointTimes = [];
+        wakeRings = [];
     }
 
     // Modal Trigger Binds
@@ -2491,4 +3213,3 @@ Global variables use 742 bytes (36%) of dynamic memory.
         renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     });
 });
-
